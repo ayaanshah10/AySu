@@ -31,16 +31,16 @@ class Creature:
         
         
 
-a = Creature(100,100,300,900)
+a = Creature(100,100,100,400)
                 
 def setup():
-    size(1000,1000)
+    size(500,500)
     background(255)
 
 def draw():
     background(255)
     stroke(0)
-    line(0,a.g,1000,a.g)
+    line(0,a.g,500,a.g)
     
     a.display()
     noFill()
