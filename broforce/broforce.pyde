@@ -52,49 +52,53 @@ class Rambo(Creature): #inheriting from creature
         self.x += self.vx #present location will be updated to present location + velocity
         self.y += self.vy
         
-        # if self.x >= g.w // 2:
-        #     g.x += self.vx
+class Game:
+    def __init__ (self,w,h,g):
+        self.w=w
+        self.h=h
+        self.g=g
+        self.x = 0
+        self.frames = 0
         
-        # if self.x-self.r < 0:
-        #     self.x = self.r
+        self.rambo = Rambo(100,100,100,self.g) #Calling Rambo
         
 
-a = Creature(100,100,100,400)
-rambo = Rambo(100,100,100,400)                
+
+g = Game(1280,720,585)                
 def setup():
-    size(500,500)
+    size(g.w,g.h)
     background(255)
 
 def draw():
     background(255)
     stroke(0)
-    line(0,a.g,500,a.g)
+    line(0,g.g,g.w,g.g)
     
-    rambo.display()
+    g.rambo.display()
     noFill()
     stroke(255,0,0)
-    ellipse(rambo.x,rambo.y,rambo.r,rambo.r)
+    ellipse(g.rambo.x,g.rambo.y,g.rambo.r,g.rambo.r)
     
 def keyPressed():
     if keyCode == LEFT:
-        rambo.keyHandler[LEFT] = True
+        g.rambo.keyHandler[LEFT] = True
     elif keyCode == RIGHT:
-        rambo.keyHandler[RIGHT] = True
+        g.rambo.keyHandler[RIGHT] = True
     elif keyCode == UP:
-        rambo.keyHandler[UP] = True
+        g.rambo.keyHandler[UP] = True
     elif keyCode == 80:
-        if rambo.pause:
-            rambo.pause = False
+        if g.rambo.pause:
+            g.rambo.pause = False
         else:
-            rambo.pause = True
+            g.rambo.pause = True
         
 def keyReleased():
     if keyCode == LEFT:
-        rambo.keyHandler[LEFT] = False
+        g.rambo.keyHandler[LEFT] = False
     elif keyCode == RIGHT:
-        rambo.keyHandler[RIGHT] = False
+        g.rambo.keyHandler[RIGHT] = False
     elif keyCode == UP:
-        rambo.keyHandler[UP] = False    
+        g.rambo.keyHandler[UP] = False    
     
         
     
