@@ -52,6 +52,32 @@ class Rambo(Creature): #inheriting from creature
         self.x += self.vx #present location will be updated to present location + velocity
         self.y += self.vy
         
+        
+class Skeletons(Creature):
+    def __init__(self,x,y,r,g,x1,x2):
+       Creature.__init__(self,x,y,r,g)
+       self.vx = 2
+       self.x1 = x1
+       self.x2 = x2
+       
+    def update(self):
+        self.gravity()
+        
+        if self.x > self.x2 :
+            self.vx = -2
+            self.dir = -1
+        elif self.x < self.x1:
+            self.vx = 2
+        self.dir = 1
+        
+        self.x += self.vx
+        self.y += self.vy
+        
+    def display(self):
+        self.update()
+        ellipse(self.x,self.y,self.r,self.r)
+    
+        
 class Game:
     def __init__ (self,w,h,g):
         self.w=w
@@ -62,7 +88,10 @@ class Game:
         
         self.rambo = Rambo(100,100,100,self.g) #Calling Rambo
         
-
+        self.enemies1=[]
+        for i in range(5):
+            self.enemies1.append(Skeletons(300+i*100,50,35,self.g,300,900))
+    
 
 g = Game(1280,720,585)                
 def setup():
@@ -75,9 +104,14 @@ def draw():
     line(0,g.g,g.w,g.g)
     
     g.rambo.display()
-    noFill()
+    noFill() 
     stroke(255,0,0)
-    ellipse(g.rambo.x,g.rambo.y,g.rambo.r,g.rambo.r)
+    ellipse(g.rambo.x,g.rambo.y,g.rambo.r,g.rambo.r) #placeholder for rambo
+    
+    noFill() 
+    stroke(0,255,0)
+    for skelly in g.enemies1:
+        skelly.display()
     
 def keyPressed():
     if keyCode == LEFT:
