@@ -24,7 +24,6 @@ class Creature:
         
         self.x += self.vx #present location will be updated to present location + velocity
         self.y += self.vy
-
         
     def display(self):
         self.update() #displays the update
@@ -54,7 +53,10 @@ class Rambo(Creature): #inheriting from creature
         
         if self.x >= g.w // 2: #center him
             g.x += self.vx
-            
+        
+        for i in range(20): 
+            if (self.x >= 300*i and self.x <= 300*i + 75) and self.y == 535:
+                self.g = 800
         
 class Skeletons(Creature):
     def __init__(self,x,y,r,g,x1,x2):
@@ -75,6 +77,11 @@ class Skeletons(Creature):
         
         self.x += self.vx
         self.y += self.vy
+        
+        print("x,y", self.x , self.y)
+        for i in range(20): 
+            if (self.x >= 300*i and self.x <= 300*i + 75) and self.y == 568:
+                self.g = 800
             
     def display(self):
         self.update()
@@ -88,6 +95,10 @@ class Game:
         self.g=g
         self.x = 0
         self.frames = 0
+        
+        
+       
+        
         
         self.rambo = Rambo(100,100,100,self.g) #Calling Rambo
         
@@ -107,7 +118,10 @@ def draw():
     line(0,g.g,g.w,g.g)
     
     g.rambo.display()
-    print(g.x)
+    print(g.rambo.x)
+    print(g.rambo.y)
+    
+    
     noFill() 
     stroke(255,0,0)
     ellipse(g.rambo.x-g.x,g.rambo.y,g.rambo.r,g.rambo.r) #placeholder for rambo
