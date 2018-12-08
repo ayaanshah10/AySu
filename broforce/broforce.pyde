@@ -20,14 +20,18 @@ def detectcollision(x1,y1,w1,h1,x2,y2,w2,h2):
 #     False
 
 class Creature:
-    def __init__(self,x,y,w,h):
+    def __init__(self,x,y,w,h,img,pw,ph,F):
         self.x = x
         self.y = y
         self.w = w
         self.h = h
+        self.F = F
+        self.pw = pw
+        self.ph = ph
         self.vx = 0 #velocity horizontally
         self.vy = 0 #velocity vertically
         self.dir = 1
+        self.img = loadImage(path+"/images/"+img)
         
     def gravity(self):
         self.vy += 0.2
@@ -42,10 +46,11 @@ class Creature:
         self.update() #displays the update
         
 class Rambo(Creature): #inheriting from creature
-    def __init__(self,x,y,w,h):
-        Creature.__init__(self,x,y,w,h)
+    def __init__(self,x,y,w,h,img,pw,ph,F):
+        Creature.__init__(self,x,y,w,h,img,pw,ph,F)
         self.keyHandler={LEFT:False, RIGHT:False, UP:False} #movement
-    
+        self.img=loadImage(path+"/images/rambo.png")
+        self.f = 0
     def update(self, blocks):
         self.gravity()
         if self.keyHandler[LEFT]:
@@ -76,13 +81,19 @@ class Rambo(Creature): #inheriting from creature
     def display(self, blocks):
         self.update(blocks)
         
+        if self.vx != 0 and self.vy == 0:
+            self.f = (self.f+0.3)%self.F
+        
+        image(self.img,self.x,self.y,self.w,self.h,int(self.f)*self.w//2,0,int(self.f+1)*self.w//2,self.h)
+        
+        
 class Skeletons(Creature):
-    def __init__(self,x,y,w,h,x1,x2):
-       Creature.__init__(self,x,y,w,h)
+    def __init__(self,x,y,w,h,x1,x2,img,pw,ph,F):
+       Creature.__init__(self,x,y,w,h,img,pw,ph,F)
        self.vx = 2
        self.x1 = x1
        self.x2 = x2
-       
+       self.img = loadImage(path+"/images/gunda.png")
     def update(self):
         self.gravity()
         
@@ -118,11 +129,11 @@ class Game:
         self.x = 0
         self.frames = 0
         
-        self.rambo = Rambo(100,100,100,100) #Calling Rambo
+        self.rambo = Rambo(100,100,100,100,"rambo.png",50,6,10) #Calling Rambo
         
         self.enemies1=[]
         for i in range(1):
-            self.enemies1.append(Skeletons(300+i*100,50,35,35,300,900))
+            self.enemies1.append(Skeletons(300+i*100,50,35,35,300,900,"gunda.png",11,22,5))
         
         self.blocks = []
         for i in range(13):
