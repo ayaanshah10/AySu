@@ -1,5 +1,5 @@
-
-
+import os
+path = os.getcwd()
 
 class Creature:
     def __init__(self,x,y,r,g):
@@ -55,7 +55,7 @@ class Rambo(Creature): #inheriting from creature
             g.x += self.vx
         
         for i in range(20): 
-            if (self.x >= 300*i and self.x <= 300*i + 75) and self.y == 535:
+            if (self.x >= 800*i and self.x <= 800*i + 75) and self.y == 535: #Making him fall
                 self.g = 800
         
 class Skeletons(Creature):
@@ -78,15 +78,27 @@ class Skeletons(Creature):
         self.x += self.vx
         self.y += self.vy
         
-        print("x,y", self.x , self.y)
         for i in range(20): 
-            if (self.x >= 300*i and self.x <= 300*i + 75) and self.y == 568:
+            if (self.x >= 800*i and self.x <= 800*i + 75) and self.y == 568:
                 self.g = 800
             
     def display(self):
         self.update()
         ellipse(self.x-g.x,self.y,self.r,self.r)
-    
+
+class Block:
+    def __init__(self,x,y,w,h):
+        self.x = x
+        self.y = y
+        self.w = w
+        self.h = h
+        self.img = loadImage(path+"/images/ground.png")
+        print(x,y)
+            
+    def display(self):
+        image(self.img,self.x-g.x,self.y)
+        # stroke(0)
+        # rect(self.x, self.y, self.w, self.h)
         
 class Game:
     def __init__ (self,w,h,g):
@@ -96,18 +108,23 @@ class Game:
         self.x = 0
         self.frames = 0
         
-        
-       
-        
-        
         self.rambo = Rambo(100,100,100,self.g) #Calling Rambo
         
         self.enemies1=[]
         for i in range(1):
             self.enemies1.append(Skeletons(300+i*100,50,35,self.g,300,900))
-    
+        
+        self.blocks = []
+        for i in range(13):
+            self.blocks.append(Block(0+i*128,585,128,128))
 
-g = Game(1280,720,585)                
+    def display(self):
+        for b in self.blocks:
+            b.display()
+        
+g = Game(1280,720,585)  
+
+              
 def setup():
     size(g.w,g.h)
     background(255)
@@ -115,12 +132,14 @@ def setup():
 def draw():
     background(255)
     stroke(0)
-    line(0,g.g,g.w,g.g)
+    line(0,g.g,g.w,g.g)    
+    g.display()
+    
+    for i in range(40):
+        stroke(255)
+        line(775+(800*i)-g.x,585, 900+(800*i)-g.x,585) #makes white lines
     
     g.rambo.display()
-    print(g.rambo.x)
-    print(g.rambo.y)
-    
     
     noFill() 
     stroke(255,0,0)
