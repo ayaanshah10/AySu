@@ -1,6 +1,24 @@
 import os
 path = os.getcwd()
 
+def detectcollision(x1,y1,w1,h1,x2,y2,w2,h2):
+        if (x2+w2>=x1>=x2 and y2+h2>=y1>=y2): 
+            return True
+        elif (x2+w2>=x1+w1>=x2 and y2+h2>=y1>=y2): 
+            return True
+        elif (x2+w2>=x1>=x2 and y2+h2>=y1+h1>=y2): 
+            return True
+        elif (x2+w2>=x1+w1>=x2 and y2+h2>=y1+h1>=y2): 
+            return True
+        else: 
+            return False
+
+# def collision(a,b):
+#     if a.x >= b.x and a.x <= b.x + b.w:
+#         a.y + a.h > b.y: # checking collision with ground
+#             True
+#     False
+
 class Creature:
     def __init__(self,x,y,w,h):
         self.x = x
@@ -79,7 +97,6 @@ class Block:
         self.w = w
         self.h = h
         self.img = loadImage(path+"/images/ground.png")
-        print(x,y)
             
     def display(self):
         image(self.img,self.x-g.x,self.y)
@@ -100,10 +117,26 @@ class Game:
         self.blocks = []
         for i in range(13):
             self.blocks.append(Block(0+i*128,585,128,128))
+    
+    def update(self):
+        for i in self.blocks:
+            #print("self.rambo.x,self.rambo.y,self.rambo.w,self.rambo.h,i.x,i.y,i.w,i.h",self.rambo.x,self.rambo.y,self.rambo.w,self.rambo.h,i.x,i.y,i.w,i.h)
+            if detectcollision(self.rambo.x,self.rambo.y,self.rambo.w,self.rambo.h,i.x,i.y,i.w,i.h):
+                pass # print("hua")
+                
+        for i in self.blocks:
+            for r in self.enemies1:
+                #print("r.x,r.y,r.w,r.h,i.x,i.y,i.w,i.h",r.x,r.y,r.w,r.h,i.x,i.y,i.w,i.h)
+                if detectcollision(r.x,r.y,r.w,r.h,i.x,i.y,i.w,i.h):
+                    print("hua")
+                        
 
     def display(self):
+        self.update()
         for b in self.blocks:
             b.display()
+            
+        
         
 g = Game(1280,720)  
 
@@ -148,11 +181,7 @@ def keyReleased():
     elif keyCode == UP:
         g.rambo.keyHandler[UP] = False    
     
-def collision(a,b):
-    if a.x >= b.x and a.x <= b.x + b.w: # checking collision with ground
-        if a.y + a.h == b.x:
-            True
-    False
+
     
     
         
