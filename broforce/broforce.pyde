@@ -46,7 +46,7 @@ class Rambo(Creature): #inheriting from creature
         Creature.__init__(self,x,y,w,h)
         self.keyHandler={LEFT:False, RIGHT:False, UP:False} #movement
     
-    def update(self):
+    def update(self, blocks):
         self.gravity()
         if self.keyHandler[LEFT]:
             self.vx = -5
@@ -57,14 +57,24 @@ class Rambo(Creature): #inheriting from creature
         else:
             self.vx = 0
         
-        if self.keyHandler[UP]:
-            self.vy = -7 
+        
+        if self.keyHandler[UP] :
+            for i in blocks:
+                if detectcollision(self.x,self.y,self.w,self.h,i.x,i.y,i.w,i.h):
+                     self.vy = -7
+                    
+            
+            #, check if i collide with rambo - then up, else nothing
+            
           
         self.x += self.vx #present location will be updated to present location + velocity
         self.y += self.vy
         
         if self.x >= g.w // 2: #center him
             g.x += self.vx
+    
+    def display(self, blocks):
+        self.update(blocks)
         
 class Skeletons(Creature):
     def __init__(self,x,y,w,h,x1,x2):
@@ -122,13 +132,17 @@ class Game:
         for i in self.blocks:
             #print("self.rambo.x,self.rambo.y,self.rambo.w,self.rambo.h,i.x,i.y,i.w,i.h",self.rambo.x,self.rambo.y,self.rambo.w,self.rambo.h,i.x,i.y,i.w,i.h)
             if detectcollision(self.rambo.x,self.rambo.y,self.rambo.w,self.rambo.h,i.x,i.y,i.w,i.h):
-                pass # print("hua")
+                self.rambo.y = i.y - self.rambo.h
+                self.rambo.vy = 0
                 
         for i in self.blocks:
             for r in self.enemies1:
                 #print("r.x,r.y,r.w,r.h,i.x,i.y,i.w,i.h",r.x,r.y,r.w,r.h,i.x,i.y,i.w,i.h)
                 if detectcollision(r.x,r.y,r.w,r.h,i.x,i.y,i.w,i.h):
-                    print("hua")
+                    r.y = i.y - r.h
+                    r.vy = 0
+                
+                
                         
 
     def display(self):
@@ -149,7 +163,7 @@ def draw():
     background(255)
     g.display()
     
-    g.rambo.display()
+    g.rambo.display(g.blocks)
     
     noFill() 
     stroke(255,0,0)
