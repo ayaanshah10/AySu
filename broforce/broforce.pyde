@@ -51,8 +51,12 @@ class Rambo(Creature): #inheriting from creature
         Creature.__init__(self,x,y,w,h,img,F)
         self.keyHandler={LEFT:False, RIGHT:False, UP:False, 32:False} #movement
         self.img=loadImage(path+"/images/rambo.png")
+        self.blockBullet = 0
         
     def update(self, blocks):
+        if self.blockBullet > 0:
+            self.blockBullet -= 1
+            
         self.gravity()
         if self.keyHandler[LEFT]:
             self.vx = -5
@@ -74,7 +78,8 @@ class Rambo(Creature): #inheriting from creature
         if self.x >= g.w // 2: #center him
             g.x += self.vx
                 
-        if self.keyHandler[32]:
+        if self.keyHandler[32] and self.blockBullet == 0:
+            self.blockBullet = 60
             g.bullets.append(Bullet(self.x+self.w-g.x,self.y+(self.h)/3,10,10,self.x+self.w-g.x+300))
     
     def display(self, blocks):
