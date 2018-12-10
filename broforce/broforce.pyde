@@ -127,8 +127,6 @@ class Skeletons(Creature):
             image(self.img,self.x-g.x,self.y,self.w,self.h,int(self.f+1)*self.w,0,int(self.f)*self.w,self.h)
         
         
-        rect(self.x,self.y,self.w,self.h)
-        
     
 class Block:
     def __init__(self,x,y,w,h):
@@ -154,7 +152,7 @@ class Game:
         for i in range(1):
             self.enemies1.append(Skeletons(300+i*100,50,256,256,300,900,"gunda.png",5))
         self.blocks = []
-        for i in range(13):
+        for i in range(50):
             self.blocks.append(Block(0+i*128,585,128,128))
     
     def update(self):
@@ -196,7 +194,6 @@ def draw():
     
     noFill() 
     stroke(255,0,0)
-    rect(g.rambo.x-g.x,g.rambo.y,g.rambo.w,g.rambo.h) #placeholder for rambo
     
     noFill() 
     stroke(0,255,0)
