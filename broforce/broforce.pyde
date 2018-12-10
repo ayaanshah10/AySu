@@ -173,7 +173,9 @@ class Game:
         self.x = 0
         self.frames = 0
         self.rambo = Rambo(100,100,98,130,"rambo.png",10) #Calling Rambo
-        
+        self.bgImgs = []
+        for i in range(4,0,-1):
+            self.bgImgs.append(loadImage(path+"/images/layer_0"+str(i)+".png"))
         self.enemies1=[]
         for i in range(3):
             self.enemies1.append(Skeletons(300+i*100,50,256,256,300,900,"gunda.png",5))
@@ -197,6 +199,23 @@ class Game:
                     r.vy = 0                
 
     def display(self):
+        self.frames += 1
+        
+        cnt = 4
+        for img in self.bgImgs:
+            # image(img,0-self.x,0)
+            if cnt == 4:
+                x = (self.x//5)%self.w
+            elif cnt == 3:
+                x = (self.x//3)%self.w
+            elif cnt == 2:
+                x = (self.x//2)%self.w
+            else:
+                x = (self.x)%self.w
+            
+            image (img,0,0,self.w-x,self.h,x,0,self.w,self.h)
+            
+            cnt -= 1
         g.rambo.display(self.blocks)
         self.update()
         for b in self.blocks:
