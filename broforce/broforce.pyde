@@ -27,7 +27,6 @@ class Creature:
         self.h = h
         self.F = F
         self.f = 0
-        #print(self)
         #self.pw = pw
         #self.ph = ph
         self.vx = 0 #velocity horizontally
@@ -46,17 +45,6 @@ class Creature:
         
     def display(self):
         self.update() #displays the update
-        #print("vx",self.vx)
-        
-        #if self.vx != 0 and self.vy == 0:
-            #print("vx",self.vx)
-            #self.f = (self.f+0.3)%self.F
-        
-        #if self.dir > 0:
-            #print(self.f)
-            #image(self.img,self.x-self.w//2-g.x,self.y-self.h//2,self.w,self.h,int(self.f)*self.w,0,int(self.f+1)*self.w,self.h)
-        #elif self.dir < 0:
-            #image(self.img,self.x-self.w//2-g.x,self.y-self.h//2,self.w,self.h,int(self.f+1)*self.w,0,int(self.f)*self.w,self.h)
 
 class Rambo(Creature): #inheriting from creature
     def __init__(self,x,y,w,h,img,F):
@@ -79,11 +67,7 @@ class Rambo(Creature): #inheriting from creature
         if self.keyHandler[UP] :
             for i in blocks:
                 if detectcollision(self.x,self.y,self.w,self.h,i.x,i.y,i.w,i.h):
-                     self.vy = -7
-                    
-            
-            #, check if i collide with rambo - then up, else nothing
-            
+                     self.vy = -7        
           
         self.x += self.vx #present location will be updated to present location + velocity
         self.y += self.vy
@@ -94,16 +78,14 @@ class Rambo(Creature): #inheriting from creature
     def display(self, blocks):
         self.update(blocks)
         
-        print(self.vy)
         if self.vx != 0: #self.vy == 0:
             #print(self.vx)
             self.f = (self.f+0.3)%self.F
         
         if self.dir > 0:
-            #print(self.f)
-            image(self.img,self.x-self.w//2-g.x,self.y-self.h//2,self.w,self.h,int(self.f)*self.w,0,int(self.f+1)*self.w,self.h)
+            image(self.img,self.x-g.x,self.y,self.w,self.h,int(self.f)*self.w,0,int(self.f+1)*self.w,self.h)
         elif self.dir < 0:
-            image(self.img,self.x-self.w//2-g.x,self.y-self.h//2,self.w,self.h,int(self.f+1)*self.w,0,int(self.f)*self.w,self.h)
+            image(self.img,self.x-g.x,self.y,self.w,self.h,int(self.f+1)*self.w,0,int(self.f)*self.w,self.h)
 
         
         #if self.vx != 0 and self.vy == 0:
@@ -118,7 +100,7 @@ class Skeletons(Creature):
        self.vx = 2
        self.x1 = x1
        self.x2 = x2
-       self.img = loadImage(path+"/images/gunda2.png")
+       self.img = loadImage(path+"/images/gunda.png")
     def update(self):
         self.gravity()
         
@@ -127,14 +109,25 @@ class Skeletons(Creature):
             self.dir = -1
         elif self.x < self.x1:
             self.vx = 2
-        self.dir = 1
+            self.dir = 1
         
         self.x += self.vx
         self.y += self.vy
             
     def display(self):
         self.update()
-        #rect(self.x,self.y,self.w,self.h)
+        
+        if self.vx != 0: #self.vy == 0:
+            #print(self.vx)
+            self.f = (self.f+0.3)%self.F
+            
+        if self.dir > 0:
+            image(self.img,self.x-g.x,self.y,self.w,self.h,int(self.f)*self.w,0,int(self.f+1)*self.w,self.h)
+        elif self.dir < 0:
+            image(self.img,self.x-g.x,self.y,self.w,self.h,int(self.f+1)*self.w,0,int(self.f)*self.w,self.h)
+        
+        
+        rect(self.x,self.y,self.w,self.h)
         
     
 class Block:
@@ -159,21 +152,19 @@ class Game:
         
         self.enemies1=[]
         for i in range(1):
-            self.enemies1.append(Skeletons(300+i*100,50,256,256,300,900,"gunda2.png",5))
+            self.enemies1.append(Skeletons(300+i*100,50,256,256,300,900,"gunda.png",5))
         self.blocks = []
         for i in range(13):
             self.blocks.append(Block(0+i*128,585,128,128))
     
     def update(self):
         for i in self.blocks:
-            #print("self.rambo.x,self.rambo.y,self.rambo.w,self.rambo.h,i.x,i.y,i.w,i.h",self.rambo.x,self.rambo.y,self.rambo.w,self.rambo.h,i.x,i.y,i.w,i.h)
             if detectcollision(self.rambo.x,self.rambo.y,self.rambo.w,self.rambo.h,i.x,i.y,i.w,i.h):
                 self.rambo.y = i.y - self.rambo.h
                 self.rambo.vy = 0
                 
         for i in self.blocks:
             for r in self.enemies1:
-                #print("r.x,r.y,r.w,r.h,i.x,i.y,i.w,i.h",r.x,r.y,r.w,r.h,i.x,i.y,i.w,i.h)
                 if detectcollision(r.x,r.y,r.w,r.h,i.x,i.y,i.w,i.h):
                     r.y = i.y - r.h
                     r.vy = 0
@@ -187,7 +178,8 @@ class Game:
         for b in self.blocks:
             b.display()
             
-        
+        for i in self.enemies1:
+            i.display
         
 g = Game(1280,720)  
 
