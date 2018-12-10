@@ -75,14 +75,12 @@ class Rambo(Creature): #inheriting from creature
             g.x += self.vx
                 
         if self.keyHandler[32]:
-            print(self.x)
             g.bullets.append(Bullet(self.x+self.w,self.y+(self.h)/3,10,10,100))
     
     def display(self, blocks):
         self.update(blocks)
         
         if self.vx != 0: #self.vy == 0:
-            #print(self.vx)
             self.f = (self.f+0.3)%self.F
         
         if self.dir > 0:
@@ -120,7 +118,6 @@ class Skeletons(Creature):
         self.update()
         
         if self.vx != 0: #self.vy == 0:
-            #print(self.vx)
             self.f = (self.f+0.3)%self.F
             
         if self.dir > 0:
@@ -147,10 +144,15 @@ class Bullet:
         self.y = y
         self.w = w
         self.h = h
+        self.x1 = x1
         self.vx = 2 
     
     def update(self):
         self.x += self.vx
+        
+        if self.x > self.x1:
+            for i in g.bullets:
+                g.bullets.remove(i) 
         
     def display(self):
         self.update()
