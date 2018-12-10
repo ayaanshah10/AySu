@@ -75,7 +75,7 @@ class Rambo(Creature): #inheriting from creature
             g.x += self.vx
                 
         if self.keyHandler[32]:
-            g.bullets.append(Bullet(self.x+self.w,self.y+(self.h)/3,10,10,100))
+            g.bullets.append(Bullet(self.x+self.w-g.x,self.y+(self.h)/3,10,10,self.x+self.w-g.x+300))
     
     def display(self, blocks):
         self.update(blocks)
@@ -145,7 +145,7 @@ class Bullet:
         self.w = w
         self.h = h
         self.x1 = x1
-        self.vx = 2 
+        self.vx = 5 
     
     def update(self):
         self.x += self.vx
