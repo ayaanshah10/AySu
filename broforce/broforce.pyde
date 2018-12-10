@@ -49,7 +49,7 @@ class Creature:
 class Rambo(Creature): #inheriting from creature
     def __init__(self,x,y,w,h,img,F):
         Creature.__init__(self,x,y,w,h,img,F)
-        self.keyHandler={LEFT:False, RIGHT:False, UP:False} #movement
+        self.keyHandler={LEFT:False, RIGHT:False, UP:False, 32:False} #movement
         self.img=loadImage(path+"/images/rambo.png")
         
     def update(self, blocks):
@@ -63,17 +63,20 @@ class Rambo(Creature): #inheriting from creature
         else:
             self.vx = 0
         
-        
         if self.keyHandler[UP] :
             for i in blocks:
                 if detectcollision(self.x,self.y,self.w,self.h,i.x,i.y,i.w,i.h):
                      self.vy = -7        
-          
+            
         self.x += self.vx #present location will be updated to present location + velocity
         self.y += self.vy
         
         if self.x >= g.w // 2: #center him
             g.x += self.vx
+                
+        if self.keyHandler[32]:
+            print(self.x)
+            g.bullets.append(Bullet(self.x+self.w,self.y+(self.h)/3,10,10,100))
     
     def display(self, blocks):
         self.update(blocks)
@@ -92,7 +95,6 @@ class Rambo(Creature): #inheriting from creature
             #self.f = (self.f+0.3)%self.F
         
         #image(self.img,self.x,self.y,self.w,self.h,int(self.f)*self.w//2,0,int(self.f+1)*self.w//2,self.h)
-        
         
 class Skeletons(Creature):
     def __init__(self,x,y,w,h,x1,x2,img,F):
@@ -138,6 +140,24 @@ class Block:
             
     def display(self):
         image(self.img,self.x-g.x,self.y)
+
+class Bullet:
+    def __init__(self,x,y,w,h,x1): #x1 is the limit of the bullet. I dont want it to go endlessly  
+        self.x = x
+        self.y = y
+        self.w = w
+        self.h = h
+        self.vx = 2 
+    
+    def update(self):
+        self.x += self.vx
+        
+    def display(self):
+        self.update()
+        
+        noFill()
+        stroke(255,0,0)
+        rect(self.x,self.y,self.w,self.h)        
         
 class Game:
     def __init__ (self,w,h):
@@ -145,16 +165,18 @@ class Game:
         self.h=h
         self.x = 0
         self.frames = 0
-        
-        self.rambo = Rambo(100,100,50,65,"rambo.png",10) #Calling Rambo
+        self.rambo = Rambo(100,100,98,130,"rambo.png",10) #Calling Rambo
         
         self.enemies1=[]
-        for i in range(1):
+        for i in range(3):
             self.enemies1.append(Skeletons(300+i*100,50,256,256,300,900,"gunda.png",5))
         self.blocks = []
         for i in range(50):
             self.blocks.append(Block(0+i*128,585,128,128))
-    
+        
+        self.bullets = []
+        
+            
     def update(self):
         for i in self.blocks:
             if detectcollision(self.rambo.x,self.rambo.y,self.rambo.w,self.rambo.h,i.x,i.y,i.w,i.h):
@@ -165,10 +187,7 @@ class Game:
             for r in self.enemies1:
                 if detectcollision(r.x,r.y,r.w,r.h,i.x,i.y,i.w,i.h):
                     r.y = i.y - r.h
-                    r.vy = 0
-                
-                
-                        
+                    r.vy = 0                
 
     def display(self):
         g.rambo.display(self.blocks)
@@ -177,7 +196,11 @@ class Game:
             b.display()
             
         for i in self.enemies1:
-            i.display
+            i.display()
+            
+        for b in self.bullets:
+            b.display()
+        
         
 g = Game(1280,720)  
 
@@ -206,7 +229,9 @@ def keyPressed():
     elif keyCode == RIGHT:
         g.rambo.keyHandler[RIGHT] = True
     elif keyCode == UP:
-        g.rambo.keyHandler[UP] = True
+        g.rambo.keyHandler[UP] = True 
+    elif keyCode == 32:
+        g.rambo.keyHandler[32] = True
     elif keyCode == 80:
         if g.rambo.pause:
             g.rambo.pause = False
@@ -220,7 +245,8 @@ def keyReleased():
         g.rambo.keyHandler[RIGHT] = False
     elif keyCode == UP:
         g.rambo.keyHandler[UP] = False    
-    
+    elif keyCode == 32:
+        g.rambo.keyHandler[32] = False
 
     
     
