@@ -174,7 +174,7 @@ class Game:
         self.frames = 0
         self.rambo = Rambo(100,100,98,130,"rambo.png",10) #Calling Rambo
         self.bgImgs = []
-        for i in range(4,0,-1):
+        for i in range(2,0,-1):
             self.bgImgs.append(loadImage(path+"/images/layer_0"+str(i)+".png"))
         self.enemies1=[]
         for i in range(3):
@@ -201,15 +201,15 @@ class Game:
     def display(self):
         self.frames += 1
         
-        cnt = 4
+        cnt = 2
         for img in self.bgImgs:
             # image(img,0-self.x,0)
-            if cnt == 4:
-                x = (self.x//5)%self.w
-            elif cnt == 3:
-                x = (self.x//3)%self.w
-            elif cnt == 2:
+            if cnt == 2:
                 x = (self.x//2)%self.w
+            #elif cnt == 1:
+                #x = (self.x//3)%self.w
+            #elif cnt == 2:
+                #x = (self.x//2)%self.w
             else:
                 x = (self.x)%self.w
             
