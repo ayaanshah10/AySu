@@ -72,6 +72,11 @@ class Rambo(Creature): #inheriting from creature
         if self.x >= g.w // 2: #center him
             g.x += self.vx
         
+        #colliding with enemy
+        count = 0
+        for i in g.enemies1:
+            if detectcollision(self.x,self.y,self.w,self.h,i.x,i.y,i.w,i.h):
+                g.__init__(1280,720)
         
         #don't let him jump from below a platform
         for b in g.blocks:
@@ -183,7 +188,6 @@ class Bullet:
                 for i in g.bullets:
                     g.bullets.remove(i)
         
-        print(self.x)
         for b in g.blocks:
             if detectcollision(self.x,self.y,self.w,self.h,b.x-g.x,b.y,b.w,b.h):
                 g.blocks.remove(b)
