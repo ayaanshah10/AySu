@@ -11,7 +11,7 @@ def detectcollision(x1,y1,w1,h1,x2,y2,w2,h2):
         elif (x2+w2>=x1+w1>=x2 and y2+h2>=y1+h1>=y2): 
             return True
         else: 
-            return False
+            return  False
 
 class Creature:
     def __init__(self,x,y,w,h,img,F):
@@ -105,16 +105,16 @@ class Skeletons(Creature):
        self.vx = 2
        self.x1 = x1
        self.x2 = x2
-       self.img = loadImage(path+"/images/gunda.png")
+       self.img = loadImage(path+"/images/Zombie1.png")
     def update(self):
         self.gravity()
         
         if self.x > self.x2 :
             self.vx = -2
-            self.dir = -1
+            self.dir = 1
         elif self.x < self.x1:
             self.vx = 2
-            self.dir = 1
+            self.dir = -1
         
         self.x += self.vx
         self.y += self.vy
@@ -123,7 +123,7 @@ class Skeletons(Creature):
         self.update()
         
         if self.vx != 0: #self.vy == 0:
-            self.f = (self.f+0.3)%self.F
+            self.f = (self.f+0.05)%self.F
             
         if self.dir > 0:
             image(self.img,self.x-g.x,self.y,self.w,self.h,int(self.f)*self.w,0,int(self.f+1)*self.w,self.h)
@@ -200,13 +200,13 @@ class Game:
         self.frames = 0
         self.rambo = Rambo(100,100,98,130,"rambo.png",10) #Calling Rambo
         self.bgImgs = []
-        for i in range(2,0,-1):
+        for i in range(3,0,-1):
             self.bgImgs.append(loadImage(path+"/images/layer_0"+str(i)+".png"))
         
         #create enemies
         self.enemies1=[]
-        for i in range(3):
-            self.enemies1.append(Skeletons(300+i*100,50,256,256,300,900,"gunda.png",5))
+        for i in range(1):
+            self.enemies1.append(Skeletons(300+i*100,50,236,246,300,900,"Zombie1.png",6))
         
         
         #create blocks
@@ -252,15 +252,15 @@ class Game:
     def display(self):
         self.frames += 1
         
-        cnt = 2
+        cnt = 3
         for img in self.bgImgs:
             # image(img,0-self.x,0)
-            if cnt == 2:
+            if cnt == 3:
                 x = (self.x//2)%self.w
-            #elif cnt == 1:
-                #x = (self.x//3)%self.w
-            #elif cnt == 2:
-                #x = (self.x//2)%self.w
+            elif cnt == 2:
+                x = (self.x//3)%self.w
+            elif cnt == 1:
+                x = (self.x//2)%self.w
             else:
                 x = (self.x)%self.w
             
