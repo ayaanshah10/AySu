@@ -78,10 +78,13 @@ class Rambo(Creature): #inheriting from creature
         if self.x >= g.w // 2: #center him
             g.x += self.vx
                 
-        if self.keyHandler[32] and self.blockBullet == 0:
+        if self.keyHandler[32] and self.blockBullet == 0 and self.dir == 1:
             self.blockBullet = 60
-            g.bullets.append(Bullet(self.x+self.w-g.x,self.y+(self.h)/3,10,10,self.x+self.w-g.x+300))
-    
+            g.bullets.append(Bullet(self.x+self.w-g.x,self.y+(self.h)/8,10,10,self.x+self.w-g.x+300,self.x+self.w-g.x-300))
+        elif self.keyHandler[32] and self.blockBullet == 0 and self.dir == -1:
+            self.blockBullet = 60
+            g.bullets.append(Bullet(self.x+-g.x,self.y+(self.h)/8,10,10,self.x+self.w-g.x+300,self.x+self.w-g.x-300))
+            
     def display(self, blocks):
         self.update(blocks)
         
@@ -144,27 +147,53 @@ class Block:
         image(self.img,self.x-g.x,self.y)
 
 class Bullet:
-    def __init__(self,x,y,w,h,x1): #x1 is the limit of the bullet. I dont want it to go endlessly  
+    def __init__(self,x,y,w,h,x1,x2): #x1 is the limit of the bullet. I dont want it to go endlessly  
         self.x = x
         self.y = y
         self.w = w
         self.h = h
         self.x1 = x1
-        self.vx = 5 
-    
+        self.x2 = x2
+        
+        if g.rambo.dir == 1:
+            self.vx = 7 
+           
+        elif g.rambo.dir == -1:
+            self.vx = -7 
+        
     def update(self):
         self.x += self.vx
         
         if self.x > self.x1:
             for i in g.bullets:
-                g.bullets.remove(i) 
+                g.bullets.remove(i)
+        
+        if self.x < self.x2:
+            for i in g.bullets:
+                g.bullets.remove(i)
         
     def display(self):
         self.update()
         
         noFill()
         stroke(255,0,0)
-        rect(self.x,self.y,self.w,self.h)        
+        rect(self.x,self.y,self.w,self.h)   
+        
+        for e in g.enemies1:
+            if detectcollision(self.x- g.x,self.y,self.w,self.h,e.x,e.y,e.w,e.h):
+                g.enemies1.remove(e)
+                del e
+                for i in g.bullets:
+                    g.bullets.remove(i)
+        
+        print(self.x)
+        for b in g.blocks:
+            if detectcollision(self.x,self.y,self.w,self.h,b.x-g.x,b.y,b.w,b.h):
+                g.blocks.remove(b)
+                del b
+                for i in g.bullets:
+                    g.bullets.remove(i) 
+                
         
 class Game:
     def __init__ (self,w,h):
@@ -176,16 +205,41 @@ class Game:
         self.bgImgs = []
         for i in range(2,0,-1):
             self.bgImgs.append(loadImage(path+"/images/layer_0"+str(i)+".png"))
+        
+        #create enemies
         self.enemies1=[]
         for i in range(3):
             self.enemies1.append(Skeletons(300+i*100,50,256,256,300,900,"gunda.png",5))
+        
+        
+        #create blocks
         self.blocks = []
-        for i in range(50):
-            self.blocks.append(Block(0+i*128,585,128,128))
+        #base ground
+        for i in range(10):
+            self.blocks.append(Block(0+i*64,649,64,64))
+        for i in range(17):
+            self.blocks.append(Block(940+i*64,649,64,64))
+        for i in range(5):
+            self.blocks.append(Block(2328+i*64,649,64,64))
+        for i in range(20):
+            self.blocks.append(Block(2948+i*64,649,64,64))    
+            
+        # for i in range(10):
+        #     self.blocks.append(Block(300+i*64-self.x,521,64,64))
+        # for i in range(7):
+        #     self.blocks.append(Block(400+i*64-self.x,457,64,64))
+        # for i in range(10):
+        #     self.blocks.append(Block(2000+i*64-self.x,521,64,64))
+        # for i in range(7):
+        #     self.blocks.append(Block(2000+i*64-self.x,457,64,64))
+        
+        #in the air blocks
+        for i in range(10):
+            self.blocks.append(Block(3500+i*64,393,64,10))
+            
         
         self.bullets = []
-        
-            
+                
     def update(self):
         for i in self.blocks:
             if detectcollision(self.rambo.x,self.rambo.y,self.rambo.w,self.rambo.h,i.x,i.y,i.w,i.h):
