@@ -13,12 +13,6 @@ def detectcollision(x1,y1,w1,h1,x2,y2,w2,h2):
         else: 
             return False
 
-# def collision(a,b):
-#     if a.x >= b.x and a.x <= b.x + b.w:
-#         a.y + a.h > b.y: # checking collision with ground
-#             True
-#     False
-
 class Creature:
     def __init__(self,x,y,w,h,img,F):
         self.x = x
@@ -77,7 +71,16 @@ class Rambo(Creature): #inheriting from creature
         
         if self.x >= g.w // 2: #center him
             g.x += self.vx
-                
+        
+        
+        #don't let him jump from below a platform
+        for b in g.blocks:
+            if b.x <= self.x and self.x <= b.x + b.w:
+                if b.y <= self.y:
+                    if self.y <= b.y + b.h + 30 and self.y >= b.y + b.h :
+                        self.vy = 7
+                            
+                                
         if self.keyHandler[32] and self.blockBullet == 0 and self.dir == 1:
             self.blockBullet = 60
             g.bullets.append(Bullet(self.x+self.w-g.x,self.y+(self.h)/8,10,10,self.x+self.w-g.x+300,self.x+self.w-g.x-300))
@@ -95,12 +98,6 @@ class Rambo(Creature): #inheriting from creature
             image(self.img,self.x-g.x,self.y,self.w,self.h,int(self.f)*self.w,0,int(self.f+1)*self.w,self.h)
         elif self.dir < 0:
             image(self.img,self.x-g.x,self.y,self.w,self.h,int(self.f+1)*self.w,0,int(self.f)*self.w,self.h)
-
-        
-        #if self.vx != 0 and self.vy == 0:
-            #self.f = (self.f+0.3)%self.F
-        
-        #image(self.img,self.x,self.y,self.w,self.h,int(self.f)*self.w//2,0,int(self.f+1)*self.w//2,self.h)
         
 class Skeletons(Creature):
     def __init__(self,x,y,w,h,x1,x2,img,F):
@@ -225,13 +222,13 @@ class Game:
             self.blocks.append(Block(2948+i*64,649,64,64))    
             
         # for i in range(10):
-        #     self.blocks.append(Block(300+i*64-self.x,521,64,64))
+        #     self.blocks.append(Block(1200+i*64-self.x,585,64,64))
         # for i in range(7):
-        #     self.blocks.append(Block(400+i*64-self.x,457,64,64))
-        # for i in range(10):
-        #     self.blocks.append(Block(2000+i*64-self.x,521,64,64))
-        # for i in range(7):
-        #     self.blocks.append(Block(2000+i*64-self.x,457,64,64))
+        #     self.blocks.append(Block(1264+i*64-self.x,521,64,64))
+        # for i in range(6):
+        #     self.blocks.append(Block(1264+i*64-self.x,457,64,64))
+        # # for i in range(7):
+        # #     self.blocks.append(Block(2000+i*64-self.x,457,64,64))
         
         #in the air blocks
         for i in range(10):
