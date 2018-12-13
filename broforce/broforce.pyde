@@ -110,9 +110,19 @@ class Skeletons(Creature):
        self.x1 = x1
        self.x2 = x2
        self.img = loadImage(path+"/images/Zombie1.png")
+    
     def update(self):
         self.gravity()
         
+        #make them smart
+        if self.x - g.rambo.x <= 300 and self.x - g.rambo.x > 0 and g.rambo.y >= self.y and g.rambo.y <= self.y + self.h:
+            self.vx = -2
+            self.dir = -1
+        
+        if g.rambo.x-self.x <= 300 and g.rambo.x-self.x > 0 and g.rambo.y >= self.y and g.rambo.y <= self.y + self.h: 
+            self.vx = 2
+            self.dir = 1
+            
         if self.x > self.x2 :
             self.vx = -1
             self.dir = 1
@@ -126,7 +136,7 @@ class Skeletons(Creature):
     def display(self):
         self.update()
         
-        if self.vx != 0: #self.vy == 0:
+        if self.vx != 0:
             self.f = (self.f+0.05)%self.F
             
         if self.dir > 0:
@@ -247,7 +257,6 @@ class Game:
         
         #enemies from doors
         self.count += 1
-        print(self.count)
         if self.count%600 == 0:
             self.enemies1.append(Skeletons(3500,50,236,246,3100,3900,"Zombie1.png",6))
         
