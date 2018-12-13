@@ -169,7 +169,7 @@ class Bullet:
         self.h = h
         self.x1 = x1
         self.x2 = x2
-        
+        self.img = loadImage(path+"/images/bullet.png")
         if g.rambo.dir == 1:
             self.vx = 7 
            
@@ -192,8 +192,8 @@ class Bullet:
         
         noFill()
         stroke(255,0,0)
-        rect(self.x,self.y,self.w,self.h)   
-        
+        #rect(self.x,self.y,self.w,self.h)   
+        image(self.img,self.x,self.y,self.w,self.h)        
         for e in g.enemies1:
             if detectcollision(self.x,self.y,self.w,self.h,e.x-g.x,e.y,e.w,e.h):
                 g.enemies1.remove(e)
