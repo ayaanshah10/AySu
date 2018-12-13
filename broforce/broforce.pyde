@@ -218,37 +218,47 @@ class Bomb:
     def triggered(self):
         
         for i in g.enemies1:
-            if (self.x - i.x <= self.b and self.x - i.x >= 0) or (i.x - (self.x + self.w) <= self.b and i.x - (self.x + self.w) >= 0):
+            if (self.x - i.x <= self.b and self.x - i.x >= 0) or (i.x - (self.x + self.w) <= self.b and i.x - self.x >= 0):
                 if (self.y - i.y <= self.b and self.y - i.y >= 0) or (i.y - (self.y + self.h) <= self.b and i.y - (self.y + self.h) >= 0):
                     g.enemies1.remove(i)
                     del i
                     
         for i in g.blocks:
-            if (self.x - i.x <= self.b and self.x - i.x >= 0) or (i.x - (self.x + self.w) <= self.b and i.x - (self.x + self.w) >= 0):
+            if (self.x - i.x <= self.b and self.x - i.x >= 0) or (i.x - (self.x + self.w) <= self.b and i.x - self.x >= 0):
                 if (self.y - i.y <= self.b and self.y - i.y >= 0) or (i.y - (self.y + self.h) <= self.b and i.y - (self.y + self.h) >= 0):
                     g.blocks.remove(i)
                     del i
         
-        if (self.x - g.rambo.x <= self.b and self.x - g.rambo.x >= 0) or (g.rambo.x - (self.x + self.w) <= self.b and g.rambo.x - (self.x + self.w) >= 0):
-                if (self.y - g.rambo.y <= self.b and self.y - g.rambo.y >= 0) or (g.rambo.y - (self.y + self.h) <= self.b and g.rambo.y - (self.y + self.h) >= 0):
-                    g.__init__(1280,720)
+        #kills Rambo
+        
+        # if (self.x - g.rambo.x <= self.b and self.x - g.rambo.x >= 0) or (g.rambo.x - (self.x + self.w) <= self.b and g.rambo.x - self.x >= 0):
+        #         if (self.y - g.rambo.y <= self.b and self.y - g.rambo.y >= 0) or (g.rambo.y - (self.y + self.h) <= self.b and g.rambo.y - (self.y + self.h) >= 0):
+        #             g.__init__(1280,720)
                 
                                 
-class Shootbomb(Bomb):
-    def __init__(self,x,y,w,h,b):
-        Bomb.def __init__(self,x,y,w,h,b)
+# class Shootbomb(Bomb):
+#     def __init__(self,x,y,w,h,b):
+#         Bomb.def __init__(self,x,y,w,h,b)
         
-    def triggerbomb(self):
+#     def triggerbomb(self):
         
 class Triggerbomb(Bomb):
     def __init__(self,x,y,w,h,b,x1,y1):
-        Bomb.def __init__(self,x,y,w,h,b)
+        Bomb.__init__(self,x,y,w,h,b)
         self.x1 = x1
         self.y1 = y1
     
     def triggerbomb(self):
-        if self.x - g.rambo.x <= self.x1                
-        
+        if (self.x - g.rambo.x <= self.x1 and self.x - g.rambo.x >= 0) or (g.rambo.x - (self.x + self.w) <= self.x1 and g.rambo.x - (self.x + self.w) >= 0):
+            if (self.y - g.rambo.y <= self.y1 and self.y - g.rambo.y >= 0) or (g.rambo.y - (self.y + self.h) <= self.y1 and g.rambo.y - (self.y + self.h) >= 0):
+                self.triggered()             
+                    
+    def display(self):
+        self.triggerbomb()
+        stroke(255,0,0)
+        rect(self.x-g.x,self.y,self.w,self.h)
+                        
+                        
 class Game:
     def __init__ (self,w,h):
         self.w=w
@@ -290,7 +300,12 @@ class Game:
         #in the air blocks
         for i in range(10):
             self.blocks.append(Block(3500+i*64,393,64,10))
+        
+        self.bombs = []
+        for i in range(1):
+            self.bombs.append(Triggerbomb(400,585,64,64,200,128,128))
             
+                
         self.bullets = []
                 
     def update(self):
@@ -341,6 +356,8 @@ class Game:
         for b in self.bullets:
             b.display()
         
+        for b in self.bombs:
+            b.display()
         
 g = Game(1280,720)  
 
