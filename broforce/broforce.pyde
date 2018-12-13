@@ -73,7 +73,6 @@ class Rambo(Creature): #inheriting from creature
             g.x += self.vx
         
         #colliding with enemy
-        count = 0
         for i in g.enemies1:
             if detectcollision(self.x,self.y,self.w,self.h,i.x,i.y,i.w,i.h):
                 g.__init__(1280,720)
@@ -107,7 +106,7 @@ class Rambo(Creature): #inheriting from creature
 class Skeletons(Creature):
     def __init__(self,x,y,w,h,x1,x2,img,F):
        Creature.__init__(self,x,y,w,h,img,F)
-       self.vx = 2
+       self.vx = 1
        self.x1 = x1
        self.x2 = x2
        self.img = loadImage(path+"/images/Zombie1.png")
@@ -115,10 +114,10 @@ class Skeletons(Creature):
         self.gravity()
         
         if self.x > self.x2 :
-            self.vx = -2
+            self.vx = -1
             self.dir = 1
         elif self.x < self.x1:
-            self.vx = 2
+            self.vx = 1
             self.dir = -1
         
         self.x += self.vx
@@ -131,9 +130,13 @@ class Skeletons(Creature):
             self.f = (self.f+0.05)%self.F
             
         if self.dir > 0:
-            image(self.img,self.x-g.x,self.y,self.w,self.h,int(self.f)*self.w,0,int(self.f+1)*self.w,self.h)
+            stroke(255,0,0)
+            rect(self.x-g.x,self.y,self.w//2,self.h)
+            image(self.img,self.x-g.x,self.y,self.w//2,self.h,int(self.f)*self.w,0,int(self.f+1)*self.w,self.h)
         elif self.dir < 0:
-            image(self.img,self.x-g.x,self.y,self.w,self.h,int(self.f+1)*self.w,0,int(self.f)*self.w,self.h)
+            stroke(255,0,0)
+            rect(self.x-g.x,self.y,self.w//2,self.h)
+            image(self.img,self.x-g.x,self.y,self.w//2,self.h,int(self.f+1)*self.w,0,int(self.f)*self.w,self.h)
         
         
     
@@ -182,7 +185,7 @@ class Bullet:
         rect(self.x,self.y,self.w,self.h)   
         
         for e in g.enemies1:
-            if detectcollision(self.x- g.x,self.y,self.w,self.h,e.x,e.y,e.w,e.h):
+            if detectcollision(self.x,self.y,self.w,self.h,e.x-g.x,e.y,e.w,e.h):
                 g.enemies1.remove(e)
                 del e
                 for i in g.bullets:
@@ -206,13 +209,13 @@ class Game:
         self.bgImgs = []
         for i in range(3,0,-1):
             self.bgImgs.append(loadImage(path+"/images/layer_0"+str(i)+".png"))
-        
+        self.blockEnemy = 0
+        self.count = 0
         #create enemies
         self.enemies1=[]
-        for i in range(1):
-            self.enemies1.append(Skeletons(300+i*100,50,236,246,300,900,"Zombie1.png",6))
-        
-        
+        for i in range(4):
+            self.enemies1.append(Skeletons(1000+(i**2)*100,50,236,246,1000,2000,"Zombie1.png",6))
+            
         #create blocks
         self.blocks = []
         #base ground
@@ -238,10 +241,17 @@ class Game:
         for i in range(10):
             self.blocks.append(Block(3500+i*64,393,64,10))
             
-        
         self.bullets = []
                 
     def update(self):
+        
+        #enemies from doors
+        self.count += 1
+        print(self.count)
+        if self.count%600 == 0:
+            self.enemies1.append(Skeletons(3500,50,236,246,3100,3900,"Zombie1.png",6))
+        
+        
         for i in self.blocks:
             if detectcollision(self.rambo.x,self.rambo.y,self.rambo.w,self.rambo.h,i.x,i.y,i.w,i.h):
                 self.rambo.y = i.y - self.rambo.h
