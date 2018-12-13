@@ -131,11 +131,11 @@ class Skeletons(Creature):
             
         if self.dir > 0:
             stroke(255,0,0)
-            rect(self.x-g.x,self.y,self.w//2,self.h)
+            #rect(self.x-g.x,self.y,self.w//2,self.h)
             image(self.img,self.x-g.x,self.y,self.w//2,self.h,int(self.f)*self.w,0,int(self.f+1)*self.w,self.h)
         elif self.dir < 0:
             stroke(255,0,0)
-            rect(self.x-g.x,self.y,self.w//2,self.h)
+            #rect(self.x-g.x,self.y,self.w//2,self.h)
             image(self.img,self.x-g.x,self.y,self.w//2,self.h,int(self.f+1)*self.w,0,int(self.f)*self.w,self.h)
         
         
@@ -270,16 +270,16 @@ class Game:
         for img in self.bgImgs:
             # image(img,0-self.x,0)
             if cnt == 3:
-                x = (self.x//2)%self.w
-            elif cnt == 2:
                 x = (self.x//3)%self.w
+            elif cnt == 2:
+                x = (self.x//2)%self.w
             elif cnt == 1:
                 x = (self.x//2)%self.w
             else:
                 x = (self.x)%self.w
             
             image (img,0,0,self.w-x,self.h,x,0,self.w,self.h)
-            
+            image (img,self.w-x,0,x,self.h,0,0,x,self.h)
             cnt -= 1
         g.rambo.display(self.blocks)
         self.update()
