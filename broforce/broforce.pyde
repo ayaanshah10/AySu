@@ -373,7 +373,10 @@ class Game:
         for i in range(5):
             self.blocks.append(Block(2328+i*64,649,64,64))
         for i in range(20):
-            self.blocks.append(Block(2948+i*64,649,64,64))    
+            self.blocks.append(Block(2948+i*64,649,64,64))
+        for i in range(25):
+            self.blocks.append(Block(5252+i*64,649,64,64))
+                
             
         for i in range(4):
             self.blocks.append(Block(2392+i*64-self.x,585,64,64))
@@ -396,6 +399,9 @@ class Game:
             
         for i in range(12):
             self.blocks.append(Block(4356+i*64,521,64,64))
+            
+        for i in range(15):
+            self.blocks.append(Block(5828+i*64,329,64,64))
                 
         
         self.triggerbombs = []
@@ -406,8 +412,11 @@ class Game:
         
         self.bulletbombs = []
         #bullet bombs
-        for i in range(1):
-            self.bulletbombs.append(Shootbomb(4484,73,128,128,128))
+        self.bulletbombs.append(Shootbomb(4484,73,128,128,128))
+        
+        self.bulletbombs.append(Shootbomb(6020,201,128,128,128))
+        
+        
                             
         self.bullets = []
                 
@@ -417,6 +426,11 @@ class Game:
         self.count += 1
         if self.count%300 == 0:
             self.enemies1.append(Skeletons(3500,50,149,246,3100,3900,"Zombie1.png",5))
+            
+        if self.count%600 == 0:
+            self.enemies1.append(Skeletons(5956,84,149,246,5828,6788,"Zombie1.png",5))
+            
+        
                     
         for i in self.blocks:
             if detectcollision(self.rambo.x,self.rambo.y,self.rambo.w,self.rambo.h,i.x,i.y,i.w,i.h):
