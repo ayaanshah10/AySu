@@ -257,6 +257,7 @@ class Shootbomb(Bomb):
     def triggerbomb(self):
         for i in g.bullets:
             if detectcollision(self.x,self.y,self.w,self.h,i.x,i.y,i.w,i.h):
+                
            
                 self.triggered()
                 self.active = False
@@ -271,6 +272,7 @@ class Shootbomb(Bomb):
         stroke(0,255,0)
         rect(self.x-g.x,self.y,self.w,self.h)
         
+        
 class Triggerbomb(Bomb):
     def __init__(self,x,y,w,h,b,x1,y1):
         Bomb.__init__(self,x,y,w,h,b)
@@ -278,9 +280,11 @@ class Triggerbomb(Bomb):
         self.y1 = y1
         self.active = True
 
+    
     def triggerbomb(self):
         if (self.x - g.rambo.x <= self.x1 and self.x - g.rambo.x >= 0) or (g.rambo.x - (self.x + self.w) <= self.x1 and g.rambo.x - (self.x + self.w) >= 0):
             if (self.y - g.rambo.y <= self.y1 and self.y - g.rambo.y >= 0) or (g.rambo.y - (self.y + self.h) <= self.y1 and g.rambo.y - (self.y + self.h) >= 0):
+                
                 self.triggered()
                 self.active = False
         
@@ -293,7 +297,7 @@ class Triggerbomb(Bomb):
         self.triggerbomb()
         stroke(255,0,0)
         rect(self.x-g.x,self.y,self.w,self.h)
-                                                
+        image(loadImage(path+"/images/Triggerbomb.png"),self.x-g.x,self.y,self.w,self.h)       
 class Game:
     def __init__ (self,w,h):
         self.w=w
@@ -367,6 +371,10 @@ class Game:
             
     def display(self):
         self.frames += 1
+        
+        # for i in self.bombs:
+        #     if i.active == False:
+        #         image(loadImage(path+"/images/bombexplosion.png"),self.x-g.x,self.y,self.w,self.h)
         
         cnt = 3
         for img in self.bgImgs:
