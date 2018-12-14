@@ -24,10 +24,10 @@ class Creature:
         self.h = h
         self.F = F
         self.f = 0
-        #self.pw = pw 
+        #self.pw = pw
         #self.ph = ph
         self.vx = 0 #velocity horizontally
-        self.vy = 0 #velocity vertically 
+        self.vy = 0 #velocity vertically
         self.dir = 1
         self.img = loadImage(path+"/images/"+img)
         
@@ -176,8 +176,6 @@ class Bullet:
         self.x1 = x1
         self.x2 = x2
         self.img = loadImage(path+"/images/bullet.png")
-        self.hit = player.loadFile(path+"/sounds/zombiehit.mp3")
-        self.whit = player.loadFile(path+"/sounds/hit.mp3")
         if g.rambo.dir == 1:
             self.vx = 7 
            
@@ -204,8 +202,6 @@ class Bullet:
         image(self.img,self.x,self.y,self.w,self.h)        
         for e in g.enemies1:
             if detectcollision(self.x,self.y,self.w,self.h,e.x-g.x,e.y,e.w,e.h):
-                self.hit.rewind()
-                self.hit.play()
                 g.enemies1.remove(e)
                 del e
                 for i in g.bullets:
@@ -213,8 +209,6 @@ class Bullet:
         
         for b in g.blocks:
             if detectcollision(self.x,self.y,self.w,self.h,b.x-g.x,b.y,b.w,b.h):
-                self.whit.rewind()
-                self.whit.play()
                 g.blocks.remove(b)
                 del b
                 for i in g.bullets:
@@ -359,24 +353,20 @@ class Spikes:
         self.vy += 0.5
     
     def update(self):
-        if g.rambo.x >= self.x - 200 and g.rambo.x <= self.x + self.w:
+        if g.rambo.x >= self.x - 100 and g.rambo.x <= self.x + self.w:
             self.gravity()
     
         self.y += self.vy
         
-        if detectcollision(self.x,self.y,self.h,self.w,g.rambo.x,g.rambo.y,g.rambo.w,g.rambo.h):
-            print('yeah')
-            g.__init__(1280,720)
+        
+            
     
     def display(self):
         self.update()
         stroke(0,0,255)    
-        #rect(self.x,self.y,self.w,self.h) 
-        image(loadImage(path+"/images/spikes.png"),self.x-g.x,self.y,self.w,self.h)           
-
-# class Winobject:
-#     def __init__(self,x,y,w,h)
-                                                                                          
+        rect(self.x,self.y,self.w,self.h) 
+                       
+                                             
 class Game:
     def __init__ (self,w,h):
         self.w=w
@@ -401,15 +391,7 @@ class Game:
         
         for i in range(2):
             self.enemies1.append(Skeletons(4484+(i**2)*100,276,149,246,4484,4996,"Zombie1.png",5))
-         
-        for i in range(2):
-            self.enemies1.append(Skeletons(5956+(i**2)*100,276,149,246,5828,6596,"Zombie1.png",5))
             
-        for i in range(2):
-            self.enemies1.append(Skeletons(6020+(i**2)*100,403,149,246,5828,6596,"Zombie1.png",5))
-        
-        self.enemies1.append(Skeletons(7044,211,149,246,7044,7172,"Zombie1.png",5))
-                    
         #create blocks
         self.blocks = []
         #base ground
@@ -421,25 +403,18 @@ class Game:
             self.blocks.append(Block(2328+i*64,649,64,64))
         for i in range(20):
             self.blocks.append(Block(2948+i*64,649,64,64))
-        for i in range(55):
+        for i in range(25):
             self.blocks.append(Block(5252+i*64,649,64,64))
-            
-            
                 
-        #building    
+            
         for i in range(4):
             self.blocks.append(Block(2392+i*64-self.x,585,64,64))
         for i in range(4):
             self.blocks.append(Block(2392+i*64-self.x,521,64,64))
-        
-        
-        for i in range(4):
-            self.blocks.append(Block(7044+i*64-self.x,585,64,64))
-        for i in range(4):
-            self.blocks.append(Block(7044+i*64-self.x,521,64,64))
-        for i in range(3):
-            self.blocks.append(Block(7044+i*64-self.x,457,64,64))
-        
+        # for i in range(6):
+        #     self.blocks.append(Block(1264+i*64-self.x,457,64,64))
+        # # for i in range(7):
+        # #     self.blocks.append(Block(2000+i*64-self.x,457,64,64))
         
          #in the air blocks
         for i in range(10):
@@ -456,32 +431,16 @@ class Game:
             
         for i in range(15):
             self.blocks.append(Block(5828+i*64,329,64,64))
-        
-        for i in range(2):
-            self.blocks.append(Block(4996+i*64,201,64,64))
-            
-        for i in range(4):
-            self.blocks.append(Block(6916+i*64,105,64,64))
-            
-        for i in range(4):
-            self.blocks.append(Block(8772+i*64,201,64,64))
                 
         # vertical blocks
-        for i in range(2):
+        for i in range(5):
             self.blocks.append(Block(5124,457+(-i)*64,64,64))
-            
-        for i in range(7):
-            self.blocks.append(Block(8772,649+(-i)*64,64,64))
-            
-        
         
         self.triggerbombs = []
         # triggerbombs
         self.triggerbombs.append(Triggerbomb(3820,585,64,64,128,128,128))
         
-        self.triggerbombs.append(Triggerbomb(4740,457,64,64,128,128,128))
-        
-        self.triggerbombs.append(Triggerbomb(7108,41,64,64,128,128,128))
+        self.triggerbombs.append(Triggerbomb(4740,393,64,64,128,128,128))
         
         self.bulletbombs = []
         #bullet bombs
@@ -491,16 +450,7 @@ class Game:
         
         #spikes
         self.spikes = []
-        for s in range(5):
-            self.spikes.append(Spikes(5956+(2*s)*64,393,64,64)) 
-            
-        for s in range(2):
-            self.spikes.append(Spikes(5316+(2*s)*64,265,64,64)) 
-            
-        for s in range(2):
-            self.spikes.append(Spikes(6916+(2*s)*64,169,64,64))
-            
-                
+        self.spikes.append(Spikes(400,100,64,64))
                             
         self.bullets = []
                 
@@ -511,16 +461,11 @@ class Game:
         if self.count%300 == 0:
             self.enemies1.append(Skeletons(3500,50,149,246,3100,3900,"Zombie1.png",5))
             
-        if self.count%450 == 0:
+        if self.count%600 == 0:
             self.enemies1.append(Skeletons(5956,84,149,246,5828,6788,"Zombie1.png",5))
+            
         
-        if self.count%700 == 0:
-            self.enemies1.append(Skeletons(7684,403,149,246,7044,8324,"Zombie1.png",5))
-        
-        if self.count%700 == 0:
-            self.enemies1.append(Skeletons(8004,403,149,246,7684,8772,"Zombie1.png",5))
-        
-                        
+                    
         for i in self.blocks:
             if detectcollision(self.rambo.x,self.rambo.y,self.rambo.w,self.rambo.h,i.x,i.y,i.w,i.h):
                 self.rambo.y = i.y - self.rambo.h
