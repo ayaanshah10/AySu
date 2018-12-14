@@ -303,7 +303,7 @@ class Triggerbomb(Bomb):
         if not self.active:
             print(millis()-self.timer, self.finished)
             if millis()-self.timer < 2000:
-                image(loadImage(path+"/images/bombexplosion.png"),self.x-g.x,self.y,self.w,self.h)
+                image(loadImage(path+"/images/bombexplosion.png"),self.x-g.x-80,self.y-70,250,250)
                 
             else: 
                 self.finished = True
