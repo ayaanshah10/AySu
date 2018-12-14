@@ -258,14 +258,13 @@ class Shootbomb(Bomb):
         
     def triggerbomb(self):
         for i in g.bullets:
-            print(i.x,i.y)
             if detectcollision(i.x,i.y,i.w,i.h,self.x,self.y,self.w,self.h):
                 self.triggered()
                 self.active = False    
         
-        for bomb in g.bombs:
+        for bomb in g.bulletbombs:
             if not bomb.active:
-                g.bombs.remove(bomb)
+                g.bulletbombs.remove(bomb)
                 del bomb
     
     def display(self):
@@ -281,15 +280,18 @@ class Triggerbomb(Bomb):
         self.y1 = y1
         self.active = True
         self.timer = 999999
+        self.finished = False
 
     
     def triggerbomb(self):
         if (self.x - g.rambo.x <= self.x1 and self.x - g.rambo.x >= 0) or (g.rambo.x - (self.x + self.w) <= self.x1 and g.rambo.x - (self.x + self.w) >= 0):
             if (self.y - g.rambo.y <= self.y1 and self.y - g.rambo.y >= 0) or (g.rambo.y - (self.y + self.h) <= self.y1 and g.rambo.y - (self.y + self.h) >= 0):
-                
+                print("trigger")
                 self.triggered()
+                print("triggered")
                 self.active = False
                 self.timer = millis()
+        
         
                     
                     
@@ -297,6 +299,20 @@ class Triggerbomb(Bomb):
                     
     def display(self):
         self.triggerbomb()
+        
+        if not self.active:
+            print(millis()-self.timer, self.finished)
+            if millis()-self.timer < 2000:
+                image(loadImage(path+"/images/bombexplosion.png"),self.x-g.x,self.y,self.w,self.h)
+                
+            else: 
+                self.finished = True
+                
+        if self.finished:
+            print("done")
+            g.triggerbombs.remove(self)
+            # del self
+        
         stroke(255,0,0)
         rect(self.x-g.x,self.y,self.w,self.h)
         image(loadImage(path+"/images/Triggerbomb.png"),self.x-g.x,self.y,self.w,self.h)
@@ -343,14 +359,15 @@ class Game:
         for i in range(10):
             self.blocks.append(Block(3500+i*64,393,64,64))
         
-        self.bombs = []
+        self.triggerbombs = []
         # triggerbombs
         for i in range(1):
-            self.bombs.append(Triggerbomb(1196,585,64,64,128,128,128))
+            self.triggerbombs.append(Triggerbomb(1196,585,64,64,128,128,128))
         
+        self.bulletbombs = []
         #bullet bombs
         for i in range(1):
-            self.bombs.append(Shootbomb(540,521,128,128,128))
+            self.bulletbombs.append(Shootbomb(540,521,128,128,128))
                             
         self.bullets = []
                 
@@ -407,17 +424,23 @@ class Game:
         for b in self.bullets:
             b.display()
         
-        for b in self.bombs:
+        for b in self.bulletbombs:
+            b.display()
+            
+        for b in self.triggerbombs:
             b.display()
         
-        for bomb in self.bombs:
-            if not bomb.active:
-                if millis() - bomb.timer<3000:
+
+            
+        # for bomb in self.bombs:
+        #     if not bomb.active:
+        #         print("inactive")
+        #         if millis() - bomb.timer<500:
                     
-                    image(loadImage(path+"/images/bombexplosion.png"),bomb.x-self.x,bomb.y,bomb.w,bomb.h)
-                else:
-                    self.bombs.remove(bomb)
-                    del bomb
+        #             image(loadImage(path+"/images/bombexplosion.png"),bomb.x-self.x,bomb.y,bomb.w,bomb.h)
+        #         else:
+        #             self.bombs.remove(bomb)
+        #             del bomb
         
 g = Game(1280,720)  
               
