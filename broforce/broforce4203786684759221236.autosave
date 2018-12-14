@@ -54,10 +54,7 @@ class Rambo(Creature): #inheriting from creature
     def update(self, blocks):
         if self.blockBullet > 0:
             self.blockBullet -= 1
-        
-        if self.y >= 800:
-            g.__init__(1280,720)
-                
+            
         self.gravity()
         if self.keyHandler[LEFT]:
             self.vx = -5
@@ -385,7 +382,7 @@ class Winobject:
         self.h = h
         
     def update(self):
-        if detectcollision(g.rambo.x,g.rambo.y,g.rambo.w,g.rambo.h,self.x,self.y,self.w,self.h):
+        if detectcollision(g.rambo.x       ,g.rambo.y,g.rambo.w,g.rambo.h,self.x,self.y,self.w,self.h):
             print('You won')
             g.state = "win"
             
@@ -393,7 +390,7 @@ class Winobject:
         self.update()
         stroke(255,0,0)
         rect(self.x - g.x, self.y, self.w, self.h)
-        image(loadImage(path+"/images/helicopter.png"),self.x - g.x, self.y, self.w, self.h)
+                                                                                          
 class Game:
     def __init__ (self,w,h):
         self.w=w
@@ -411,7 +408,7 @@ class Game:
         self.blockEnemy = 0
         self.count = 0
         
-        self.winner = Winobject(9028,250,640,320)
+        self.winner = Winobject(2000,500,200,200)
         
         #create enemies
         self.enemies1=[]
@@ -488,7 +485,7 @@ class Game:
             self.blocks.append(Block(8772+i*64,201,64,64))
                 
         # vertical blocks
-        for i in range(1):
+        for i in range(2):
             self.blocks.append(Block(5124,457+(-i)*64,64,64))
             
         for i in range(7):
@@ -534,7 +531,7 @@ class Game:
             
         if self.count%450 == 0:
             self.enemies1.append(Skeletons(5956,84,149,246,5828,6788,"Zombie1.png",5))
-            
+        
         if self.count%700 == 0:
             self.enemies1.append(Skeletons(7684,403,149,246,7044,8324,"Zombie1.png",5))
         
@@ -580,9 +577,6 @@ class Game:
                 cnt -= 1
             
             image(loadImage(path+"/images/door.png"),3500-g.x,200,250,250)
-            image(loadImage(path+"/images/door.png"),5956-g.x,84,250,250)
-            image(loadImage(path+"/images/door.png"),7684-g.x,403,250,250)
-            image(loadImage(path+"/images/door.png"),8004-g.x,403,250,250)
             g.rambo.display(self.blocks)
             self.update()
             for b in self.blocks:
@@ -616,8 +610,7 @@ class Game:
             
         else:
             background(255)
-            #rect(100, 100, 100, 100)
-            image(loadImage(path+"/images/win.png"),100,100, 958, 826)
+            rect(100, 100, 100, 100)
             
         
 g = Game(1280,720)  
@@ -665,9 +658,7 @@ def keyReleased():
     elif keyCode == 32:
         g.rambo.keyHandler[32] = False
 
-def mouseClicked():
-    if g.state == 'win':
-        g.__init__(1280,720)     
+    
     
         
     
