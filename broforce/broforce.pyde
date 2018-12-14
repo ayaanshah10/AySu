@@ -348,6 +348,9 @@ class Game:
         self.x = 0
         self.frames = 0
         self.rambo = Rambo(100,100,98,130,"rambo.png",10) #Calling Rambo
+        self.music = player.loadFile(path+"/sounds/gameplay.mp3")
+        self.music.rewind()
+        self.music.play()
         self.bgImgs = []
         for i in range(3,0,-1):
             self.bgImgs.append(loadImage(path+"/images/layer_0"+str(i)+".png"))
