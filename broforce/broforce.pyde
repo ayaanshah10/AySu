@@ -340,7 +340,31 @@ class Triggerbomb(Bomb):
         stroke(255,0,0)
         rect(self.x-g.x,self.y,self.w,self.h)
         image(loadImage(path+"/images/Triggerbomb.png"),self.x-g.x,self.y,self.w,self.h)
-               
+
+class Spikes:
+    def __init__ (self,x,y,w,h):
+        self.x = x
+        self.y = y
+        self.w = w
+        self.h = h
+        self.vy = 0
+        
+    def gravity(self):
+        self.vy += 0.5
+    
+    def update(self):
+        if g.rambo.x >= self.x - 100 and g.rambo.x <= self.x + self.w:
+            self.gravity()
+    
+        self.y += self.vy
+        
+    
+    def display(self):
+        self.update()
+        stroke(0,0,255)    
+        rect(self.x,self.y,self.w,self.h) 
+                       
+                                             
 class Game:
     def __init__ (self,w,h):
         self.w=w
@@ -400,12 +424,15 @@ class Game:
         for i in range(7):
             self.blocks.append(Block(5124+i*64,201,64,64))
             
-        for i in range(12):
+        for i in range(13):
             self.blocks.append(Block(4356+i*64,521,64,64))
             
         for i in range(15):
             self.blocks.append(Block(5828+i*64,329,64,64))
                 
+        # vertical blocks
+        for i in range(5):
+            self.blocks.append(Block(5124,457+(-i)*64,64,64))
         
         self.triggerbombs = []
         # triggerbombs
@@ -419,7 +446,9 @@ class Game:
         
         self.bulletbombs.append(Shootbomb(6020,201,128,128,128))
         
-        
+        #spikes
+        self.spikes = []
+        self.spikes.append(Spikes(400,100,64,64))
                             
         self.bullets = []
                 
@@ -487,7 +516,8 @@ class Game:
         for b in self.triggerbombs:
             b.display()
         
-
+        for s in self.spikes:
+            s.display()
             
         # for bomb in self.bombs:
         #     if not bomb.active:
