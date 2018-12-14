@@ -83,8 +83,7 @@ class Rambo(Creature): #inheriting from creature
                 if b.y <= self.y:
                     if self.y <= b.y + b.h + 30 and self.y >= b.y + b.h :
                         self.vy = 7
-                            
-                                
+                                                        
         if self.keyHandler[32] and self.blockBullet == 0 and self.dir == 1:
             self.blockBullet = 60
             g.bullets.append(Bullet(self.x+self.w-g.x,self.y+(self.h)/8,10,10,self.x+self.w-g.x+300,self.x+self.w-g.x-300))
@@ -116,12 +115,12 @@ class Skeletons(Creature):
         
         #make them smart
         if self.x - g.rambo.x <= 300 and self.x - g.rambo.x > 0 and g.rambo.y >= self.y and g.rambo.y <= self.y + self.h:
-            self.vx = -2
-            self.dir = -1
+            self.vx = -3
+            self.dir = 1
         
         if g.rambo.x-self.x <= 300 and g.rambo.x-self.x > 0 and g.rambo.y >= self.y and g.rambo.y <= self.y + self.h: 
-            self.vx = 2
-            self.dir = 1
+            self.vx = 3
+            self.dir = -1
             
         if self.x > self.x2 :
             self.vx = -1
@@ -141,15 +140,14 @@ class Skeletons(Creature):
             
         if self.dir > 0:
             stroke(255,0,0)
-            #rect(self.x-g.x,self.y,self.w//2,self.h)
-            image(self.img,self.x-g.x,self.y,self.w//2,self.h,int(self.f)*self.w,0,int(self.f+1)*self.w,self.h)
+            rect(self.x-g.x,self.y,self.w,self.h)
+            image(self.img,self.x-g.x,self.y,self.w,self.h,int(self.f)*self.w,0,int(self.f+1)*self.w,self.h)
         elif self.dir < 0:
             stroke(255,0,0)
-            #rect(self.x-g.x,self.y,self.w//2,self.h)
-            image(self.img,self.x-g.x,self.y,self.w//2,self.h,int(self.f+1)*self.w,0,int(self.f)*self.w,self.h)
-        
-        
-    
+            rect(self.x-g.x,self.y,self.w,self.h)
+            image(self.img,self.x-g.x,self.y,self.w,self.h,int(self.f+1)*self.w,0,int(self.f)*self.w,self.h)
+       
+          
 class Block:
     def __init__(self,x,y,w,h):
         self.x = x
@@ -216,24 +214,39 @@ class Bomb:
         self.b = b
     
     def triggered(self):
-        
+        delenemies = [] 
         for i in g.enemies1:
             if (self.x - i.x <= self.b and self.x - i.x >= 0) or (i.x - (self.x + self.w) <= self.b and i.x - self.x >= 0):
                 if (self.y - i.y <= self.b and self.y - i.y >= 0) or (i.y - (self.y + self.h) <= self.b and i.y - (self.y + self.h) >= 0):
-                    g.enemies1.remove(i)
-                    del i
-                    
+                    delenemies.append(i)
+        
+        newenemies = []
+        for i in g.enemies1:
+            if i not in delenemies:
+                newenemies.append(i)
+        
+            g.enemies1 = newenemies
+                
+        delblocks = []            
         for i in g.blocks:
             if (self.x - i.x <= self.b and self.x - i.x >= 0) or (i.x - (self.x + self.w) <= self.b and i.x - self.x >= 0):
                 if (self.y - i.y <= self.b and self.y - i.y >= 0) or (i.y - (self.y + self.h) <= self.b and i.y - (self.y + self.h) >= 0):
-                    g.blocks.remove(i)
-                    del i
+                    delblocks.append(i)
         
+        newblocks = []
+        for i in g.blocks:
+            if i not in delblocks:
+                newblocks.append(i)
+                                        
+        g.blocks = newblocks
+    
+                        
         #kills Rambo
         
         # if (self.x - g.rambo.x <= self.b and self.x - g.rambo.x >= 0) or (g.rambo.x - (self.x + self.w) <= self.b and g.rambo.x - self.x >= 0):
         #         if (self.y - g.rambo.y <= self.b and self.y - g.rambo.y >= 0) or (g.rambo.y - (self.y + self.h) <= self.b and g.rambo.y - (self.y + self.h) >= 0):
-        #             g.__init__(1280,720)
+        #             if self.active:
+        #                  g.__init__(1280,720)
                 
                                 
 # class Shootbomb(Bomb):
@@ -247,18 +260,24 @@ class Triggerbomb(Bomb):
         Bomb.__init__(self,x,y,w,h,b)
         self.x1 = x1
         self.y1 = y1
-    
+        self.active = True
+
     def triggerbomb(self):
         if (self.x - g.rambo.x <= self.x1 and self.x - g.rambo.x >= 0) or (g.rambo.x - (self.x + self.w) <= self.x1 and g.rambo.x - (self.x + self.w) >= 0):
             if (self.y - g.rambo.y <= self.y1 and self.y - g.rambo.y >= 0) or (g.rambo.y - (self.y + self.h) <= self.y1 and g.rambo.y - (self.y + self.h) >= 0):
-                self.triggered()             
+                self.triggered()
+                self.active = False
+        
+        for bomb in g.bombs:
+            if not bomb.active:
+                g.bombs.remove(bomb)
+                del bomb
                     
     def display(self):
         self.triggerbomb()
         stroke(255,0,0)
         rect(self.x-g.x,self.y,self.w,self.h)
-                        
-                        
+                                                
 class Game:
     def __init__ (self,w,h):
         self.w=w
@@ -280,7 +299,7 @@ class Game:
         self.blocks = []
         #base ground
         for i in range(10):
-            self.blocks.append(Block(0+i*64,649,64,64))
+            self.blocks.append(Block(i*64,649,64,64))
         for i in range(17):
             self.blocks.append(Block(940+i*64,649,64,64))
         for i in range(5):
@@ -297,15 +316,14 @@ class Game:
         # # for i in range(7):
         # #     self.blocks.append(Block(2000+i*64-self.x,457,64,64))
         
-        #in the air blocks
-        for i in range(10):
-            self.blocks.append(Block(3500+i*64,393,64,10))
+        # #in the air blocks
+        # for i in range(10):
+        #     self.blocks.append(Block(3500+i*64,393,64,64))
         
         self.bombs = []
         for i in range(1):
-            self.bombs.append(Triggerbomb(400,585,64,64,200,128,128))
-            
-                
+            self.bombs.append(Triggerbomb(1196,585,64,64,128,128,128))
+                            
         self.bullets = []
                 
     def update(self):
@@ -314,8 +332,7 @@ class Game:
         self.count += 1
         if self.count%600 == 0:
             self.enemies1.append(Skeletons(3500,50,236,246,3100,3900,"Zombie1.png",6))
-        
-        
+                    
         for i in self.blocks:
             if detectcollision(self.rambo.x,self.rambo.y,self.rambo.w,self.rambo.h,i.x,i.y,i.w,i.h):
                 self.rambo.y = i.y - self.rambo.h
@@ -326,7 +343,7 @@ class Game:
                 if detectcollision(r.x,r.y,r.w,r.h,i.x,i.y,i.w,i.h):
                     r.y = i.y - r.h
                     r.vy = 0                
-
+            
     def display(self):
         self.frames += 1
         
@@ -360,7 +377,6 @@ class Game:
             b.display()
         
 g = Game(1280,720)  
-
               
 def setup():
     size(g.w,g.h)
