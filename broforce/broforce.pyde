@@ -1,5 +1,8 @@
+add_library('minim')
+
 import os
 path = os.getcwd()
+player = Minim(this)
 
 def detectcollision(x1,y1,w1,h1,x2,y2,w2,h2):
         if (x2+w2>=x1>=x2 and y2+h2>=y1>=y2): 
@@ -46,7 +49,8 @@ class Rambo(Creature): #inheriting from creature
         self.keyHandler={LEFT:False, RIGHT:False, UP:False, 32:False} #movement
         self.img=loadImage(path+"/images/rambo.png")
         self.blockBullet = 0
-        
+        self.kill = player.loadFile(path+"/sounds/shoot.mp3")
+        self.explode = player.loadFile(path+"/sounds/blast.mp3")
     def update(self, blocks):
         if self.blockBullet > 0:
             self.blockBullet -= 1
@@ -87,9 +91,13 @@ class Rambo(Creature): #inheriting from creature
         if self.keyHandler[32] and self.blockBullet == 0 and self.dir == 1:
             self.blockBullet = 60
             g.bullets.append(Bullet(self.x+self.w-g.x,self.y+(self.h)/8,10,10,self.x+self.w-g.x+300,self.x+self.w-g.x-300))
+            self.kill.rewind()
+            self.kill.play()
         elif self.keyHandler[32] and self.blockBullet == 0 and self.dir == -1:
             self.blockBullet = 60
             g.bullets.append(Bullet(self.x+-g.x,self.y+(self.h)/8,10,10,self.x+self.w-g.x+300,self.x+self.w-g.x-300))
+            self.kill.rewind()
+            self.kill.play()
             
     def display(self, blocks):
         self.update(blocks)
@@ -258,11 +266,14 @@ class Shootbomb(Bomb):
         self.active = True
         self.timer = 999999
         self.finished2 = False
-        
+        self.explode = player.loadFile(path+"/sounds/blast.mp3")
+
     def triggerbomb(self):
         for i in g.bullets:
             if detectcollision(i.x,i.y,i.w,i.h,self.x-g.x,self.y,self.w,self.h):
                 self.triggered()
+                self.explode.rewind()
+                self.explode.play()
                 self.active = False
                 self.timer = millis()    
         
@@ -298,12 +309,15 @@ class Triggerbomb(Bomb):
         self.active = True
         self.timer = 999999
         self.finished = False
+        self.explode = player.loadFile(path+"/sounds/blast.mp3")
 
     
     def triggerbomb(self):
         if (self.x - g.rambo.x <= self.x1 and self.x - g.rambo.x >= 0) or (g.rambo.x - (self.x + self.w) <= self.x1 and g.rambo.x - (self.x + self.w) >= 0):
             if (self.y - g.rambo.y <= self.y1 and self.y - g.rambo.y >= 0) or (g.rambo.y - (self.y + self.h) <= self.y1 and g.rambo.y - (self.y + self.h) >= 0):
                 self.triggered()
+                self.explode.rewind()
+                self.explode.play()
                 self.active = False
                 self.timer = millis()        
                     
