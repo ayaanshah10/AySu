@@ -257,7 +257,7 @@ class Shootbomb(Bomb):
     def triggerbomb(self):
         for i in g.bullets:
             if detectcollision(self.x,self.y,self.w,self.h,i.x,i.y,i.w,i.h):
-                print('yeah
+           
                 self.triggered()
                 self.active = False
         
@@ -309,7 +309,7 @@ class Game:
         #create enemies
         self.enemies1=[]
         for i in range(4):
-            self.enemies1.append(Skeletons(1000+(i**2)*100,50,236,246,1000,2000,"Zombie1.png",6))
+            self.enemies1.append(Skeletons(1000+(i**2)*100,50,149,246,1000,2000,"Zombie1.png",5))
             
         #create blocks
         self.blocks = []
@@ -332,9 +332,9 @@ class Game:
         # # for i in range(7):
         # #     self.blocks.append(Block(2000+i*64-self.x,457,64,64))
         
-        # #in the air blocks
-        # for i in range(10):
-        #     self.blocks.append(Block(3500+i*64,393,64,64))
+         #in the air blocks
+        for i in range(10):
+            self.blocks.append(Block(3500+i*64,393,64,64))
         
         self.bombs = []
         # triggerbombs
@@ -352,7 +352,7 @@ class Game:
         #enemies from doors
         self.count += 1
         if self.count%600 == 0:
-            self.enemies1.append(Skeletons(3500,50,236,246,3100,3900,"Zombie1.png",6))
+            self.enemies1.append(Skeletons(3500,50,149,246,3100,3900,"Zombie1.png",5))
                     
         for i in self.blocks:
             if detectcollision(self.rambo.x,self.rambo.y,self.rambo.w,self.rambo.h,i.x,i.y,i.w,i.h):
@@ -383,6 +383,8 @@ class Game:
             image (img,0,0,self.w-x,self.h,x,0,self.w,self.h)
             image (img,self.w-x,0,x,self.h,0,0,x,self.h)
             cnt -= 1
+        
+        image(loadImage(path+"/images/door.png"),3500-g.x,200,250,250)
         g.rambo.display(self.blocks)
         self.update()
         for b in self.blocks:
