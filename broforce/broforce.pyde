@@ -176,6 +176,8 @@ class Bullet:
         self.x1 = x1
         self.x2 = x2
         self.img = loadImage(path+"/images/bullet.png")
+        self.hit = player.loadFile(path+"/sounds/zombiehit.mp3")
+        self.whit = player.loadFile(path+"/sounds/hit.mp3")
         if g.rambo.dir == 1:
             self.vx = 7 
            
@@ -202,6 +204,8 @@ class Bullet:
         image(self.img,self.x,self.y,self.w,self.h)        
         for e in g.enemies1:
             if detectcollision(self.x,self.y,self.w,self.h,e.x-g.x,e.y,e.w,e.h):
+                self.hit.rewind()
+                self.hit.play()
                 g.enemies1.remove(e)
                 del e
                 for i in g.bullets:
@@ -209,6 +213,8 @@ class Bullet:
         
         for b in g.blocks:
             if detectcollision(self.x,self.y,self.w,self.h,b.x-g.x,b.y,b.w,b.h):
+                self.whit.rewind()
+                self.whit.play()
                 g.blocks.remove(b)
                 del b
                 for i in g.bullets:
@@ -362,8 +368,8 @@ class Spikes:
     def display(self):
         self.update()
         stroke(0,0,255)    
-        rect(self.x,self.y,self.w,self.h) 
-                       
+        #rect(self.x,self.y,self.w,self.h) 
+        image(loadImage(path+"/images/spikes.png"),self.x,self.y,self.w,self.h)           
                                              
 class Game:
     def __init__ (self,w,h):
