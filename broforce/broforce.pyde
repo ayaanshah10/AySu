@@ -249,11 +249,27 @@ class Bomb:
         #                  g.__init__(1280,720)
                 
                                 
-# class Shootbomb(Bomb):
-#     def __init__(self,x,y,w,h,b):
-#         Bomb.def __init__(self,x,y,w,h,b)
+class Shootbomb(Bomb):
+    def __init__(self,x,y,w,h,b):
+        Bomb.__init__(self,x,y,w,h,b)
+        self.active = True
         
-#     def triggerbomb(self):
+    def triggerbomb(self):
+        for i in g.bullets:
+            if detectcollision(self.x,self.y,self.w,self.h,i.x,i.y,i.w,i.h):
+                print('yeah
+                self.triggered()
+                self.active = False
+        
+        for bomb in g.bombs:
+            if not bomb.active:
+                g.bombs.remove(bomb)
+                del bomb
+    
+    def display(self):
+        self.triggerbomb()
+        stroke(0,255,0)
+        rect(self.x-g.x,self.y,self.w,self.h)
         
 class Triggerbomb(Bomb):
     def __init__(self,x,y,w,h,b,x1,y1):
@@ -321,8 +337,13 @@ class Game:
         #     self.blocks.append(Block(3500+i*64,393,64,64))
         
         self.bombs = []
+        # triggerbombs
         for i in range(1):
             self.bombs.append(Triggerbomb(1196,585,64,64,128,128,128))
+        
+        #bullet bombs
+        for i in range(1):
+            self.bombs.append(Shootbomb(540,521,128,128,128))
                             
         self.bullets = []
                 
