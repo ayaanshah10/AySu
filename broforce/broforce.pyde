@@ -204,7 +204,9 @@ class Bullet:
                 g.blocks.remove(b)
                 del b
                 for i in g.bullets:
-                    g.bullets.remove(i) 
+                    g.bullets.remove(i)
+                    
+           
 class Bomb:
     def __init__(self,x,y,w,h,b):
         self.x = x
@@ -256,11 +258,10 @@ class Shootbomb(Bomb):
         
     def triggerbomb(self):
         for i in g.bullets:
-            if detectcollision(self.x,self.y,self.w,self.h,i.x,i.y,i.w,i.h):
-                
-           
+            print(i.x,i.y)
+            if detectcollision(i.x,i.y,i.w,i.h,self.x,self.y,self.w,self.h):
                 self.triggered()
-                self.active = False
+                self.active = False    
         
         for bomb in g.bombs:
             if not bomb.active:
@@ -279,6 +280,7 @@ class Triggerbomb(Bomb):
         self.x1 = x1
         self.y1 = y1
         self.active = True
+        self.timer = 999999
 
     
     def triggerbomb(self):
@@ -287,17 +289,18 @@ class Triggerbomb(Bomb):
                 
                 self.triggered()
                 self.active = False
+                self.timer = millis()
         
-        for bomb in g.bombs:
-            if not bomb.active:
-                g.bombs.remove(bomb)
-                del bomb
+                    
+                    
+                
                     
     def display(self):
         self.triggerbomb()
         stroke(255,0,0)
         rect(self.x-g.x,self.y,self.w,self.h)
-        image(loadImage(path+"/images/Triggerbomb.png"),self.x-g.x,self.y,self.w,self.h)       
+        image(loadImage(path+"/images/Triggerbomb.png"),self.x-g.x,self.y,self.w,self.h)
+               
 class Game:
     def __init__ (self,w,h):
         self.w=w
@@ -406,6 +409,15 @@ class Game:
         
         for b in self.bombs:
             b.display()
+        
+        for bomb in self.bombs:
+            if not bomb.active:
+                if millis() - bomb.timer<3000:
+                    
+                    image(loadImage(path+"/images/bombexplosion.png"),bomb.x-self.x,bomb.y,bomb.w,bomb.h)
+                else:
+                    self.bombs.remove(bomb)
+                    del bomb
         
 g = Game(1280,720)  
               
