@@ -255,12 +255,16 @@ class Shootbomb(Bomb):
     def __init__(self,x,y,w,h,b):
         Bomb.__init__(self,x,y,w,h,b)
         self.active = True
+        self.active = True
+        self.timer = 999999
+        self.finished2 = False
         
     def triggerbomb(self):
         for i in g.bullets:
             if detectcollision(i.x,i.y,i.w,i.h,self.x,self.y,self.w,self.h):
                 self.triggered()
-                self.active = False    
+                self.active = False
+                self.timer = millis()    
         
         for bomb in g.bulletbombs:
             if not bomb.active:
@@ -269,6 +273,19 @@ class Shootbomb(Bomb):
     
     def display(self):
         self.triggerbomb()
+        
+        if not self.active:
+            print(millis()-self.timer, self.finished)
+            if millis()-self.timer < 2000:
+                image(loadImage(path+"/images/bombexplosion.png"),self.x-g.x-80,self.y-70,250,250)
+                
+            else: 
+                self.finished2 = True
+                
+        if self.finished2:
+            print("done")
+            g.bulletbombs.remove(self)
+        
         stroke(0,255,0)
         rect(self.x-g.x,self.y,self.w,self.h)
         image(loadImage(path+"/images/bombcrate.png"),self.x-g.x,self.y,self.w,self.h)
@@ -286,23 +303,16 @@ class Triggerbomb(Bomb):
     def triggerbomb(self):
         if (self.x - g.rambo.x <= self.x1 and self.x - g.rambo.x >= 0) or (g.rambo.x - (self.x + self.w) <= self.x1 and g.rambo.x - (self.x + self.w) >= 0):
             if (self.y - g.rambo.y <= self.y1 and self.y - g.rambo.y >= 0) or (g.rambo.y - (self.y + self.h) <= self.y1 and g.rambo.y - (self.y + self.h) >= 0):
-                print("trigger")
                 self.triggered()
-                print("triggered")
                 self.active = False
-                self.timer = millis()
-        
-        
-                    
-                    
-                
+                self.timer = millis()        
                     
     def display(self):
         self.triggerbomb()
         
         if not self.active:
             print(millis()-self.timer, self.finished)
-            if millis()-self.timer < 2000:
+            if millis()-self.timer < 1000:
                 image(loadImage(path+"/images/bombexplosion.png"),self.x-g.x-80,self.y-70,250,250)
                 
             else: 
