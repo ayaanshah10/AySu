@@ -271,7 +271,7 @@ class Shootbomb(Bomb):
         self.triggerbomb()
         stroke(0,255,0)
         rect(self.x-g.x,self.y,self.w,self.h)
-        
+        image(loadImage(path+"/images/bombcrate.png"),self.x-g.x,self.y,self.w,self.h)
         
 class Triggerbomb(Bomb):
     def __init__(self,x,y,w,h,b,x1,y1):
