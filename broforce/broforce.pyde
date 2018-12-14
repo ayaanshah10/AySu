@@ -374,8 +374,22 @@ class Spikes:
         #rect(self.x,self.y,self.w,self.h) 
         image(loadImage(path+"/images/spikes.png"),self.x-g.x,self.y,self.w,self.h)           
 
-# class Winobject:
-#     def __init__(self,x,y,w,h)
+class Winobject:
+    def __init__(self,x,y,w,h):
+        self.x = x
+        self.y = y
+        self.w = w
+        self.h = h
+        
+    def update(self):
+        if detectcollision(g.rambo.x,g.rambo.y,g.rambo.w,g.rambo.h,self.x,self.y,self.w,self.h):
+            print('You won')
+            g.state = "win"
+            
+    def display(self):
+        self.update()
+        stroke(255,0,0)
+        rect(self.x - g.x, self.y, self.w, self.h)
                                                                                           
 class Game:
     def __init__ (self,w,h):
@@ -388,10 +402,14 @@ class Game:
         self.music.rewind()
         self.music.play()
         self.bgImgs = []
+        self.state = "play" 
         for i in range(3,0,-1):
             self.bgImgs.append(loadImage(path+"/images/layer_0"+str(i)+".png"))
         self.blockEnemy = 0
         self.count = 0
+        
+        self.winner = Winobject(2000,500,200,200)
+        
         #create enemies
         self.enemies1=[]
         for i in range(4):
@@ -533,58 +551,67 @@ class Game:
                     r.vy = 0                
             
     def display(self):
-        self.frames += 1
         
-        # for i in self.bombs:
-        #     if i.active == False:
-        #         image(loadImage(path+"/images/bombexplosion.png"),self.x-g.x,self.y,self.w,self.h)
+        if self.state == "play":
         
-        cnt = 3
-        for img in self.bgImgs:
-            # image(img,0-self.x,0)
-            if cnt == 3:
-                x = (self.x//3)%self.w
-            elif cnt == 2:
-                x = (self.x//2)%self.w
-            elif cnt == 1:
-                x = (self.x//2)%self.w
-            else:
-                x = (self.x)%self.w
+            self.frames += 1
             
-            image (img,0,0,self.w-x,self.h,x,0,self.w,self.h)
-            image (img,self.w-x,0,x,self.h,0,0,x,self.h)
-            cnt -= 1
-        
-        image(loadImage(path+"/images/door.png"),3500-g.x,200,250,250)
-        g.rambo.display(self.blocks)
-        self.update()
-        for b in self.blocks:
-            b.display()
+            # for i in self.bombs:
+            #     if i.active == False:
+            #         image(loadImage(path+"/images/bombexplosion.png"),self.x-g.x,self.y,self.w,self.h)
             
-        for i in self.enemies1:
-            i.display()
+            cnt = 3
+            for img in self.bgImgs:
+                # image(img,0-self.x,0)
+                if cnt == 3:
+                    x = (self.x//3)%self.w
+                elif cnt == 2:
+                    x = (self.x//2)%self.w
+                elif cnt == 1:
+                    x = (self.x//2)%self.w
+                else:
+                    x = (self.x)%self.w
+                
+                image (img,0,0,self.w-x,self.h,x,0,self.w,self.h)
+                image (img,self.w-x,0,x,self.h,0,0,x,self.h)
+                cnt -= 1
             
-        for b in self.bullets:
-            b.display()
-        
-        for b in self.bulletbombs:
-            b.display()
+            image(loadImage(path+"/images/door.png"),3500-g.x,200,250,250)
+            g.rambo.display(self.blocks)
+            self.update()
+            for b in self.blocks:
+                b.display()
+                
+            for i in self.enemies1:
+                i.display()
+                
+            for b in self.bullets:
+                b.display()
             
-        for b in self.triggerbombs:
-            b.display()
-        
-        for s in self.spikes:
-            s.display()
+            for b in self.bulletbombs:
+                b.display()
+                
+            for b in self.triggerbombs:
+                b.display()
             
-        # for bomb in self.bombs:
-        #     if not bomb.active:
-        #         print("inactive")
-        #         if millis() - bomb.timer<500:
-                    
-        #             image(loadImage(path+"/images/bombexplosion.png"),bomb.x-self.x,bomb.y,bomb.w,bomb.h)
-        #         else:
-        #             self.bombs.remove(bomb)
-        #             del bomb
+            for s in self.spikes:
+                s.display()
+            
+            self.winner.display()
+            # for bomb in self.bombs:
+            #     if not bomb.active:
+            #         print("inactive")
+            #         if millis() - bomb.timer<500:
+                        
+            #             image(loadImage(path+"/images/bombexplosion.png"),bomb.x-self.x,bomb.y,bomb.w,bomb.h)
+            #         else:
+            #             self.bombs.remove(bomb)
+            #             del bomb
+            
+        else:
+            background(255)
+            rect(100, 100, 100, 100)
+            
         
 g = Game(1280,720)  
               
