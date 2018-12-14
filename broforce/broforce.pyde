@@ -485,7 +485,7 @@ class Game:
             self.blocks.append(Block(8772+i*64,201,64,64))
                 
         # vertical blocks
-        for i in range(2):
+        for i in range(1):
             self.blocks.append(Block(5124,457+(-i)*64,64,64))
             
         for i in range(7):
@@ -577,6 +577,9 @@ class Game:
                 cnt -= 1
             
             image(loadImage(path+"/images/door.png"),3500-g.x,200,250,250)
+            image(loadImage(path+"/images/door.png"),5956-g.x,84,250,250)
+            image(loadImage(path+"/images/door.png"),7684-g.x,403,250,250)
+            image(loadImage(path+"/images/door.png"),8004-g.x,403,250,250)
             g.rambo.display(self.blocks)
             self.update()
             for b in self.blocks:
