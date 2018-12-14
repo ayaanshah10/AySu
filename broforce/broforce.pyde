@@ -390,7 +390,7 @@ class Winobject:
         self.update()
         stroke(255,0,0)
         rect(self.x - g.x, self.y, self.w, self.h)
-                                                                                          
+        image(loadImage(path+"/images/helicopter.png"),self.x - g.x, self.y, self.w, self.h)
 class Game:
     def __init__ (self,w,h):
         self.w=w
@@ -408,7 +408,7 @@ class Game:
         self.blockEnemy = 0
         self.count = 0
         
-        self.winner = Winobject(2000,500,200,200)
+        self.winner = Winobject(9028,250,640,320)
         
         #create enemies
         self.enemies1=[]
@@ -531,7 +531,7 @@ class Game:
             
         if self.count%450 == 0:
             self.enemies1.append(Skeletons(5956,84,149,246,5828,6788,"Zombie1.png",5))
-        
+            
         if self.count%700 == 0:
             self.enemies1.append(Skeletons(7684,403,149,246,7044,8324,"Zombie1.png",5))
         
@@ -610,7 +610,8 @@ class Game:
             
         else:
             background(255)
-            rect(100, 100, 100, 100)
+            #rect(100, 100, 100, 100)
+            image(loadImage(path+"/images/win.png"),100,100, 958, 826)
             
         
 g = Game(1280,720)  
