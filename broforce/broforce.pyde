@@ -151,11 +151,11 @@ class Skeletons(Creature):
             
         if self.dir > 0:
             stroke(255,0,0)
-            rect(self.x-g.x,self.y,self.w,self.h)
+            #rect(self.x-g.x,self.y,self.w,self.h)
             image(self.img,self.x-g.x,self.y,self.w,self.h,int(self.f)*self.w,0,int(self.f+1)*self.w,self.h)
         elif self.dir < 0:
             stroke(255,0,0)
-            rect(self.x-g.x,self.y,self.w,self.h)
+            #rect(self.x-g.x,self.y,self.w,self.h)
             image(self.img,self.x-g.x,self.y,self.w,self.h,int(self.f+1)*self.w,0,int(self.f)*self.w,self.h)
        
           
@@ -307,7 +307,7 @@ class Shootbomb(Bomb):
             g.bulletbombs.remove(self)
         
         stroke(0,255,0)
-        rect(self.x-g.x,self.y,self.w,self.h)
+        #rect(self.x-g.x,self.y,self.w,self.h)
         image(loadImage(path+"/images/bombcrate.png"),self.x-g.x,self.y,self.w,self.h)
         
 class Triggerbomb(Bomb):
@@ -347,7 +347,7 @@ class Triggerbomb(Bomb):
             # del self
         
         stroke(255,0,0)
-        rect(self.x-g.x,self.y,self.w,self.h)
+        #rect(self.x-g.x,self.y,self.w,self.h)
         image(loadImage(path+"/images/Triggerbomb.png"),self.x-g.x,self.y,self.w,self.h)
 
 class Spikes:
@@ -392,7 +392,7 @@ class Winobject:
     def display(self):
         self.update()
         stroke(255,0,0)
-        rect(self.x - g.x, self.y, self.w, self.h)
+        #rect(self.x - g.x, self.y, self.w, self.h)
         image(loadImage(path+"/images/helicopter.png"),self.x - g.x, self.y, self.w, self.h)
 class Game:
     def __init__ (self,w,h):
